@@ -19,7 +19,16 @@
                     "name": "Zoom",
                     "type": "Value",
                     "id": "a7333f3d-c7b3-43c6-92c3-007a0463c51a",
-                    "expectedControlType": "Double",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Mouse",
+                    "type": "Value",
+                    "id": "2ec0c7bf-b834-4a16-9d8f-eee725dfa076",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -89,6 +98,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Zoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4da032db-ce13-4e66-b722-10df48ea7d82",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Mouse",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

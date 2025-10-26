@@ -1,6 +1,6 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,9 +8,11 @@ using UnityEngine.InputSystem;
 public class PlayerCamera : MonoBehaviour
 {
     private PlayerInput _playerInput;
-    private Camera _cam;
+    [SerializeField] private Camera _cam;
     private Vector2 _move;
     private Vector3 _clampedPos;
+
+    private Vector2 _scrollMouse;
 
     private int _minFieldOfView = 25;
     private int _maxFieldOfView = 39;
@@ -32,7 +34,6 @@ public class PlayerCamera : MonoBehaviour
 
     private void Initialization()
     {
-        _cam = GetComponent<Camera>();
         if (_cam == null)
         {
             Debug.LogError("Camera is null on Camera object");
@@ -48,19 +49,6 @@ public class PlayerCamera : MonoBehaviour
         Zoom();
     }
 
-    private void Zoom()
-    {
-        if (Mouse.current.scroll.up.IsPressed() && _cam.fieldOfView > _minFieldOfView)
-        {
-            _cam.fieldOfView--;
-        }
-
-        if (Mouse.current.scroll.down.IsPressed() && _cam.fieldOfView < _maxFieldOfView)
-        {
-            _cam.fieldOfView++;
-        }
-    }
-
     private void MoveCamera()
     {
         //Get Value for XY
@@ -69,25 +57,40 @@ public class PlayerCamera : MonoBehaviour
         //Check if we are moving to left,right up or down
         if (_move.x < 0)
         {
-            transform.Translate((Vector3.left * _movementSpeed) * Time.deltaTime);
+            _cam.transform.Translate((Vector3.left * _movementSpeed) * Time.deltaTime);
         }
 
         else if (_move.x > 0)
         {
-            transform.Translate((Vector3.right * _movementSpeed) * Time.deltaTime);
+            _cam.transform.Translate((Vector3.right * _movementSpeed) * Time.deltaTime);
         }
 
         if (_move.y < 0)
         {
-            transform.Translate((Vector3.down * _movementSpeed) * Time.deltaTime);
+            _cam.transform.Translate((Vector3.down * _movementSpeed) * Time.deltaTime);
         }
 
         else if (_move.y > 0)
         {
-            transform.Translate((Vector3.up * _movementSpeed) * Time.deltaTime);
+            _cam.transform.Translate((Vector3.up * _movementSpeed) * Time.deltaTime);
         }
 
-        _clampedPos = new Vector3(Mathf.Clamp(transform.position.x, _xMin, _xMax), Mathf.Clamp(transform.position.y, _yMin, _yMax), Mathf.Clamp(transform.position.z, _zMin, _zMax));
-        transform.position = _clampedPos;
+        _clampedPos = new Vector3(Mathf.Clamp(_cam.transform.position.x, _xMin, _xMax), Mathf.Clamp(_cam.transform.position.y, _yMin, _yMax), Mathf.Clamp(_cam.transform.position.z, _zMin, _zMax));
+        _cam.transform.position = _clampedPos;
+    }
+
+    private void Zoom()
+    {
+        _scrollMouse = _playerInput.Player.Zoom.ReadValue<Vector2>();
+
+        if (_scrollMouse.y > 0 && _cam.fieldOfView > _minFieldOfView)
+        {
+            _cam.fieldOfView--;
+        }
+
+        if (_scrollMouse.y < 0 && _cam.fieldOfView < _maxFieldOfView)
+        {
+            _cam.fieldOfView++;
+        }
     }
 }
