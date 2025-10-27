@@ -42,3 +42,23 @@ public class EventController<T>
         baseAction?.Invoke(type);
     }
 }
+
+public class EventController<T,T2>
+{
+    public Action<T,T2> baseAction;
+
+    public void AddListener(Action<T,T2> listener)
+    {
+        baseAction += listener;
+    }
+
+    public void RemoveListener(Action<T,T2> listener)
+    {
+        baseAction -= listener;
+    }
+
+    public void InvokeEvent(T type, T2 type2)
+    {
+        baseAction?.Invoke(type,type2);
+    }
+}

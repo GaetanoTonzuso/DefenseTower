@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerCamera : MonoBehaviour
 {
-    private PlayerInput _playerInput;
     [SerializeField] private Camera _cam;
     private Vector2 _move;
     private Vector3 _clampedPos;
@@ -38,9 +37,6 @@ public class PlayerCamera : MonoBehaviour
         {
             Debug.LogError("Camera is null on Camera object");
         }
-
-        _playerInput = new PlayerInput();
-        _playerInput.Enable();
     }
 
     private void Update()
@@ -52,7 +48,7 @@ public class PlayerCamera : MonoBehaviour
     private void MoveCamera()
     {
         //Get Value for XY
-        _move = _playerInput.Player.Movement.ReadValue<Vector2>();
+        _move = PlayerController.Instance.playerInput.Player.Movement.ReadValue<Vector2>();
 
         //Check if we are moving to left,right up or down
         if (_move.x < 0)
@@ -81,7 +77,7 @@ public class PlayerCamera : MonoBehaviour
 
     private void Zoom()
     {
-        _scrollMouse = _playerInput.Player.Zoom.ReadValue<Vector2>();
+        _scrollMouse = PlayerController.Instance.playerInput.Player.Zoom.ReadValue<Vector2>();
 
         if (_scrollMouse.y > 0 && _cam.fieldOfView > _minFieldOfView)
         {

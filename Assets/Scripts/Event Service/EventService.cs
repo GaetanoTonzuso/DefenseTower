@@ -17,13 +17,13 @@ public class EventService
         }
     }
 
-    public EventController<GameObject> OnItemSelected { get; private set; } 
+    public EventController<GameObject,int> OnItemSelected { get; private set; } 
     public EventController OnItemPreview { get; private set; }
     public EventController OnItemNotPreview { get; private set; }
 
     public EventService ()
     {
-        OnItemSelected = new EventController<GameObject> ();
+        OnItemSelected = new EventController<GameObject,int> ();
         OnItemPreview = new EventController();
         OnItemNotPreview = new EventController();
     }

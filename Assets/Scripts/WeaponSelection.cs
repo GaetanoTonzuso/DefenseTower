@@ -45,7 +45,7 @@ public class WeaponSelection : MonoBehaviour
         }
     }
 
-    private void OnItemSelected(GameObject itemSelected)
+    private void OnItemSelected(GameObject itemSelected, int cost)
     {
         if(_currentItem != null)
         {
