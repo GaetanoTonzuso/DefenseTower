@@ -31,4 +31,9 @@ public class GameManager : MonoBehaviour
     {
         _warfunds += fundsToAdd;
     }
+
+    public void RemoveWarfunds(int fundsToRemove)
+    {
+        _warfunds -= fundsToRemove;
+    }
 }

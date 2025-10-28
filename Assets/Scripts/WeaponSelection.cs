@@ -17,6 +17,7 @@ public class WeaponSelection : MonoBehaviour
         EventService.Instance.OnItemSelected.AddListener(OnItemSelected);
         EventService.Instance.OnItemPreview.AddListener(OnItemPreview);
         EventService.Instance.OnItemNotPreview.AddListener(OnItemNotPreview);
+        EventService.Instance.OnItemSpawned.AddListener(OnItemSpawned);
     }
 
     private void OnDisable()
@@ -24,12 +25,12 @@ public class WeaponSelection : MonoBehaviour
         EventService.Instance.OnItemSelected.RemoveListener(OnItemSelected);
         EventService.Instance.OnItemPreview.RemoveListener(OnItemPreview);
         EventService.Instance.OnItemNotPreview.RemoveListener(OnItemNotPreview);
+        EventService.Instance.OnItemSpawned.RemoveListener(OnItemSpawned);
     }
 
     private void Update()
     {
         _mousePos = Mouse.current.position.ReadValue();
-        if (_currentItem == null) return;
         if (_currentItem != null)
         {
             if(_isPreviewing)
@@ -47,18 +48,12 @@ public class WeaponSelection : MonoBehaviour
 
     private void OnItemSelected(GameObject itemSelected, int cost)
     {
-        if(_currentItem != null)
-        {
+        if (_currentItem != null)
             Destroy(_currentItem);
-            _currentItem = null;
-            _currentItem = itemSelected;
-            _currentItem = Instantiate(_currentItem, Camera.main.ScreenToWorldPoint(new Vector3(_mousePos.x, _mousePos.y, _z)), Quaternion.identity);
-        }
-        else
-        {
-            _currentItem = itemSelected;
-            _currentItem = Instantiate(_currentItem, Camera.main.ScreenToWorldPoint(new Vector3(_mousePos.x, _mousePos.y, _z)), Quaternion.identity);
-        }
+        
+        Vector3 spawnPos = Camera.main.ScreenToWorldPoint(new Vector3(_mousePos.x, _mousePos.y, _z));
+
+        _currentItem = Instantiate(itemSelected, spawnPos, Quaternion.identity);
     }
 
     private void OnItemPreview()
@@ -69,5 +64,10 @@ public class WeaponSelection : MonoBehaviour
     private void OnItemNotPreview()
     {
         _isPreviewing = false;
+    }
+
+    private void OnItemSpawned()
+    {
+        Destroy(_currentItem);
     }
 }

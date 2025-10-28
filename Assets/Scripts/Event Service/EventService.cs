@@ -17,14 +17,23 @@ public class EventService
         }
     }
 
+    //Player Inputs
+    public EventController OnActionPerformed { get; private set; }
+    public EventController OnActionCancel { get; private set; }
+
+    //Weapons/Items
     public EventController<GameObject,int> OnItemSelected { get; private set; } 
     public EventController OnItemPreview { get; private set; }
     public EventController OnItemNotPreview { get; private set; }
+    public EventController OnItemSpawned { get; private set; }
 
     public EventService ()
     {
         OnItemSelected = new EventController<GameObject,int> ();
         OnItemPreview = new EventController();
         OnItemNotPreview = new EventController();
+        OnActionPerformed = new EventController();
+        OnItemSpawned = new EventController();
+        OnActionCancel = new EventController();
     }
 }
