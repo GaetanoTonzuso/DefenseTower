@@ -11,6 +11,7 @@ public class WeaponInfo : MonoBehaviour , IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        //Inform WeaponSelection
         EventService.Instance.OnItemSelected.InvokeEvent(_itemPrefab,_cost);
     }
 }

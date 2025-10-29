@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 
@@ -28,6 +29,17 @@ namespace GameDevHQ.FileBase.Gatling_Gun
 
         private AudioSource _audioSource; //reference to the audio source component
         private bool _startWeaponNoise = true;
+
+        
+        //Targets and Rotation settings
+        [SerializeField] private GameObject _turret;
+        [SerializeField] private float _rotationSpeed = 3f;
+        [SerializeField] private List<Enemy> _enemies = new List<Enemy>();
+        [SerializeField] private Enemy _currentTarget;
+
+        Vector3 directionTarget;
+        Quaternion targetDirection;
+        private bool _hasTarget;
 
         // Use this for initialization
         void Start()
@@ -62,6 +74,23 @@ namespace GameDevHQ.FileBase.Gatling_Gun
                 _audioSource.Stop(); //stop the sound effect from playing
                 _startWeaponNoise = true; //set the start weapon noise value to true
             }*/
+            AimTarget();
+        }
+
+        private void AimTarget()
+        {
+            if (_hasTarget)
+            {
+                directionTarget = _currentTarget.transform.position - _turret.transform.position;
+                directionTarget.y = 0;
+
+                if (directionTarget.sqrMagnitude < 0.001f)
+                    return;
+
+                targetDirection = Quaternion.LookRotation(directionTarget);
+
+                _turret.transform.rotation = Quaternion.Slerp(_turret.transform.rotation, targetDirection, Time.deltaTime * _rotationSpeed);
+            }
         }
 
         // Method to rotate gun barrel 
@@ -69,6 +98,37 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         {
             _gunBarrel.transform.Rotate(Vector3.forward * Time.deltaTime * -500.0f); //rotate the gun barrel along the "forward" (z) axis at 500 meters per second
 
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if(other.CompareTag("Enemy"))
+            {
+                _enemies.Add(other.GetComponent<Enemy>());
+                if(_enemies.Count > 0)
+                {
+                    _hasTarget = true;
+                    _currentTarget = _enemies[0];
+                }
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Enemy"))
+            {
+                _enemies.Remove(other.GetComponent<Enemy>());
+                if (_enemies.Count > 0)
+                {
+                    _hasTarget = true;
+                    _currentTarget = _enemies[0];
+                }
+                else
+                {
+                    _hasTarget = false;
+                    _currentTarget = null;
+                }
+            }
         }
     }
 

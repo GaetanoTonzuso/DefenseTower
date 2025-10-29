@@ -55,9 +55,6 @@ public class PlaceZone : MonoBehaviour, IInteractable
                 {
                     Debug.Log("Not funds");
                 }
-
-               
-
                 _previewSpawned = true;
                 _itemClone = Instantiate(_itemPreviewPrefab,transform.position, Quaternion.identity);
 
