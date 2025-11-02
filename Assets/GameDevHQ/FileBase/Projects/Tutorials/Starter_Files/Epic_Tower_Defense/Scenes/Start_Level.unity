@@ -4032,7 +4032,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8140155127373330225, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8140155127373687505, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10419,27 +10419,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4230997169374272, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9963728
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4230997169374272, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 3.492132e-27
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4230997169374272, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.08509533
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4230997169374272, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 4.088903e-26
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4230997169374272, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -9.763
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4633165491543876, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -14.17
+      value: -9.2
       objectReference: {fileID: 0}
     - target: {fileID: 4633165491543876, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
       propertyPath: m_LocalPosition.y
@@ -10447,7 +10447,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4633165491543876, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.47
+      value: -0.42
       objectReference: {fileID: 0}
     - target: {fileID: 4633165491543876, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
       propertyPath: m_LocalRotation.w
@@ -10481,6 +10481,26 @@ PrefabInstance:
       propertyPath: _turret
       value: 
       objectReference: {fileID: 605246168}
+    - target: {fileID: 872982758821850196, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 872982758821850196, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 872982758821850196, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 872982758821850196, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 872982758821850196, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2751846948313293404, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
       propertyPath: m_IsTrigger
       value: 1
@@ -13137,6 +13157,14 @@ PrefabInstance:
       propertyPath: _targets.Array.data[2]
       value: 
       objectReference: {fileID: 1887313589}
+    - target: {fileID: 2803407776247365483, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5412111456025399843, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8140155127373330225, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
       propertyPath: m_Name
       value: Enemy_Orc

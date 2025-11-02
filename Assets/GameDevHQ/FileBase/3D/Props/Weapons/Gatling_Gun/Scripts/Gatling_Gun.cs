@@ -20,8 +20,11 @@ namespace GameDevHQ.FileBase.Gatling_Gun
     /// </summary>
 
     [RequireComponent(typeof(AudioSource))] //Require Audio Source component
-    public class Gatling_Gun : MonoBehaviour , IDamageable
+    public class Gatling_Gun : MonoBehaviour , IDamageable , IAttack
     {
+        [SerializeField] private GameObject _firePoint; //Reference to hold Shooting Point
+        [SerializeField] private float _fireDistance = 30f;
+
         private Transform _gunBarrel; //Reference to hold the gun barrel
         public GameObject Muzzle_Flash; //reference to the muzzle flash effect to play when firing
         public ParticleSystem bulletCasings; //reference to the bullet casing effect to play when firing
@@ -30,24 +33,29 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         private AudioSource _audioSource; //reference to the audio source component
         private bool _startWeaponNoise = true;
 
-        
         //Targets and Rotation settings
         [SerializeField] private GameObject _turret;
         [SerializeField] private float _rotationSpeed = 3f;
         [SerializeField] private List<Enemy> _enemies = new List<Enemy>();
-        [SerializeField] private Enemy _currentTarget;
+        [SerializeField] private Transform _currentTarget;
 
         Vector3 directionTarget;
         Quaternion targetDirection;
         private bool _hasTarget;
-
-        private float _health = 30f;
+        private bool _isShooting;
+        
+        //Turret Health
+        [SerializeField] private float _health = 30f;
         public float Health { get; set;}
+
+        public int AtkDamage { get; set;}
+        [SerializeField] private int _atkDamage = 2;
 
         // Use this for initialization
         void Start()
         {
             Health = _health;
+            AtkDamage = _atkDamage;
             _gunBarrel = GameObject.Find("Barrel_to_Spin").GetComponent<Transform>(); //assigning the transform of the gun barrel to the variable
             Muzzle_Flash.SetActive(false); //setting the initial state of the muzzle flash effect to off
             _audioSource = GetComponent<AudioSource>(); //ssign the Audio Source to the reference variable
@@ -58,42 +66,56 @@ namespace GameDevHQ.FileBase.Gatling_Gun
 
         // Update is called once per frame
         void Update()
-        {
-            /*if (Input.GetMouseButton(0)) //Check for left click (held) user input
-            { 
-                RotateBarrel(); //Call the rotation function responsible for rotating our gun barrel
-                Muzzle_Flash.SetActive(true); //enable muzzle effect particle effect
-                bulletCasings.Emit(1); //Emit the bullet casing particle effect  
-
-                if (_startWeaponNoise == true) //checking if we need to start the gun sound
-                {
-                    _audioSource.Play(); //play audio clip attached to audio source
-                    _startWeaponNoise = false; //set the start weapon noise value to false to prevent calling it again
-                }
-
-            }
-            else if (Input.GetMouseButtonUp(0)) //Check for left click (release) user input
-            {      
-                Muzzle_Flash.SetActive(false); //turn off muzzle flash particle effect
-                _audioSource.Stop(); //stop the sound effect from playing
-                _startWeaponNoise = true; //set the start weapon noise value to true
-            }*/
+        {         
             AimTarget();
+        }
+
+        private void FixedUpdate()
+        {
+            if (!_isShooting) return;
+
+            Attack();
         }
 
         private void AimTarget()
         {
             if (_hasTarget)
             {
-                directionTarget = _currentTarget.transform.position - _turret.transform.position;
-                directionTarget.y = 0;
+                Vector3 targetPos = _currentTarget.position + Vector3.up * -0.6f;
+                directionTarget = targetPos - _turret.transform.position;
 
-                if (directionTarget.sqrMagnitude < 0.001f)
-                    return;
+                if (directionTarget.sqrMagnitude < 0.001f) return;
 
                 targetDirection = Quaternion.LookRotation(directionTarget);
 
                 _turret.transform.rotation = Quaternion.Slerp(_turret.transform.rotation, targetDirection, Time.deltaTime * _rotationSpeed);
+
+                //Check if we are aiming it and then fire
+                float angleDifference = Quaternion.Angle(_turret.transform.rotation, targetDirection);
+                if(angleDifference < 1.5f)
+                {
+                    _isShooting = true;
+                    RotateBarrel(); //Call the rotation function responsible for rotating our gun barrel
+                    Muzzle_Flash.SetActive(true); //enable muzzle effect particle effect
+                    bulletCasings.Emit(1); //Emit the bullet casing particle effect  
+
+                    if (_startWeaponNoise == true) //checking if we need to start the gun sound
+                    {
+                        _audioSource.Play(); //play audio clip attached to audio source
+                        _startWeaponNoise = false; //set the start weapon noise value to false to prevent calling it again
+                    }
+                }
+                else
+                {
+                    _isShooting = false;
+                }
+            }
+
+            else if (!_hasTarget) //Check if there is no target
+            {
+                Muzzle_Flash.SetActive(false); //turn off muzzle flash particle effect
+                _audioSource.Stop(); //stop the sound effect from playing
+                _startWeaponNoise = true; //set the start weapon noise value to true
             }
         }
 
@@ -111,7 +133,8 @@ namespace GameDevHQ.FileBase.Gatling_Gun
                 if(_enemies.Count > 0)
                 {
                     _hasTarget = true;
-                    _currentTarget = _enemies[0];
+                    AimTarget aimPoint = _enemies[0].GetComponentInChildren<AimTarget>();
+                    _currentTarget = aimPoint.transform;
                 }
             }
 
@@ -133,7 +156,8 @@ namespace GameDevHQ.FileBase.Gatling_Gun
                 if (_enemies.Count > 0)
                 {
                     _hasTarget = true;
-                    _currentTarget = _enemies[0];
+                    AimTarget aimPoint = _enemies[0].GetComponentInChildren<AimTarget>();
+                    _currentTarget = aimPoint.transform;
                 }
                 else
                 {
@@ -152,6 +176,31 @@ namespace GameDevHQ.FileBase.Gatling_Gun
                 Debug.Log("Destroy this turret");
             }
         }
+
+        public void Attack()
+        {
+            FireRay();
+        }
+
+        private void FireRay()
+        {
+            Debug.Log("Start Ray");
+            RaycastHit hit;
+            Debug.DrawRay(_firePoint.transform.position, _firePoint.transform.forward * _fireDistance, Color.red, 5f);
+            if(Physics.Raycast(_firePoint.transform.position,_firePoint.transform.forward,out hit,_fireDistance))
+            {
+                if(hit.collider != null)
+                {
+                    IDamageable damageable = hit.collider.GetComponent<IDamageable>();
+                    if(damageable != null)
+                    {
+                        Debug.Log("Hit: " + hit.collider.name);
+                        damageable.Damage(AtkDamage);
+                    }
+                }
+            }
+        }
+
     }
 
 }

@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour , IDamageable , IAttack
 {
     public float Health { get; set; }
+    [SerializeField] private float _health = 100;
     public int AtkDamage {  get; set; }
     private float _speed = 1.5f;
     
@@ -14,6 +15,7 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
     private int _currentTarget;
     private int _warfundsCredits = 150;
     private bool _hasDetectedTower;
+    private bool _isDead;
 
     private Transform _target;
     private Coroutine _attackRoutine;
@@ -32,6 +34,7 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
     protected virtual void Init()
     {
         AtkDamage = _atkDamage;
+        Health = _health;
         _anim = GetComponent<Animator>();
         if (_anim == null)
         {
@@ -55,10 +58,10 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
 
     protected void Update()
     {
-        /*if (_hasDetectedTower && _target != null)
+        if (_hasDetectedTower && _target != null)
         {
             transform.LookAt(_target);
-        }*/
+        }
 
         MoveAI();
     }
@@ -91,13 +94,24 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
 
     public void Damage(float damage)
     {
+        if (Health >= 1 && !_isDead)
+        {
+            Health -= damage;
 
+        }
+
+        else if(Health < 1 && !_isDead)
+        {
+            _isDead = true;
+            Debug.Log(gameObject.name + " Dead");
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Turret"))
         {
+            _agent.stoppingDistance = 1.5f;
             _hasDetectedTower = true;
             _target = other.transform.parent;
 
@@ -109,6 +123,7 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
     {
         if(other.CompareTag("Turret"))
         {
+            _agent.stoppingDistance = 0f;
             _hasDetectedTower = false;
             _agent.SetDestination(_targets[_currentTarget].position);
         }
