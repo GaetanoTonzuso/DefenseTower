@@ -1,17 +1,27 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy : MonoBehaviour , IDamageable
+
+public class Enemy : MonoBehaviour , IDamageable , IAttack
 {
     public float Health { get; set; }
+    public int AtkDamage {  get; set; }
     private float _speed = 1.5f;
-    private int _warfundsCredits = 150;
+    
 
+    private int _currentTarget;
+    private int _warfundsCredits = 150;
+    private bool _hasDetectedTower;
+
+    private Transform _target;
+    private Coroutine _attackRoutine;
+    private WaitForSeconds _attackRoutineSeconds = new WaitForSeconds(1.5f);
     private Animator _anim;
     private NavMeshAgent _agent;
-    private int _currentTarget;
+
+    [SerializeField] private int _atkDamage = 20;
     [SerializeField] private Transform[] _targets;
 
     private void Start()
@@ -21,6 +31,7 @@ public class Enemy : MonoBehaviour , IDamageable
 
     protected virtual void Init()
     {
+        AtkDamage = _atkDamage;
         _anim = GetComponent<Animator>();
         if (_anim == null)
         {
@@ -44,22 +55,37 @@ public class Enemy : MonoBehaviour , IDamageable
 
     protected void Update()
     {
+        /*if (_hasDetectedTower && _target != null)
+        {
+            transform.LookAt(_target);
+        }*/
+
         MoveAI();
     }
 
     private void MoveAI()
     {
-        if (_agent.remainingDistance < 0.5f && _agent != null)
+        if (_hasDetectedTower || _agent == null) return;
+
+        if(_agent.remainingDistance < 0.8f)
+            {
+                _currentTarget++;
+                if (_currentTarget < _targets.Length)
+                {
+                    _agent.SetDestination(_targets[_currentTarget].position);
+                }
+                else
+                {
+                    _agent.isStopped = true;
+                }
+            }
+    }
+
+    public void Attack()
+    {
+        if (_attackRoutine == null)
         {
-            _currentTarget++;
-            if (_currentTarget < _targets.Length)
-            {
-                _agent.SetDestination(_targets[_currentTarget].position);
-            }
-            else
-            {
-                _agent.isStopped = true;
-            }
+            _attackRoutine = StartCoroutine(AttackRoutine());
         }
     }
 
@@ -67,4 +93,45 @@ public class Enemy : MonoBehaviour , IDamageable
     {
 
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Turret"))
+        {
+            _hasDetectedTower = true;
+            _target = other.transform.parent;
+
+            Attack();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.CompareTag("Turret"))
+        {
+            _hasDetectedTower = false;
+            _agent.SetDestination(_targets[_currentTarget].position);
+        }
+    }
+
+    IEnumerator AttackRoutine()
+    {
+        _agent.SetDestination(_target.position);
+        while(Vector3.Distance(transform.position,_target.position) > _agent.stoppingDistance)
+        {
+            yield return null;
+        }
+
+        _agent.isStopped = true;
+
+        while (Vector3.Distance(transform.position, _target.position) <= _agent.stoppingDistance)
+        {
+            _anim.SetTrigger("Attack");
+            yield return _attackRoutineSeconds;
+        }
+
+        _attackRoutine = null;
+        yield return null;
+    }
+
 }

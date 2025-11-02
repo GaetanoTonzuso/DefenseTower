@@ -4030,6 +4030,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Orc (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8140155127373330225, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8140155127373687505, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.902
@@ -10409,6 +10413,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gatling_Gun
       objectReference: {fileID: 0}
+    - target: {fileID: 1425032208015248, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 4230997169374272, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.9963728
@@ -10431,7 +10439,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4633165491543876, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -14.612
+      value: -14.17
       objectReference: {fileID: 0}
     - target: {fileID: 4633165491543876, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
       propertyPath: m_LocalPosition.y
@@ -10439,7 +10447,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4633165491543876, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.457203
+      value: 5.47
       objectReference: {fileID: 0}
     - target: {fileID: 4633165491543876, guid: 75f3d166786e1cb40afc4396cd0bcc22, type: 3}
       propertyPath: m_LocalRotation.w
@@ -13118,10 +13126,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2424117816616241002, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
-      propertyPath: _targets.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2424117816616241002, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
       propertyPath: _targets.Array.data[0]
       value: 
       objectReference: {fileID: 315720483}
@@ -13133,29 +13137,21 @@ PrefabInstance:
       propertyPath: _targets.Array.data[2]
       value: 
       objectReference: {fileID: 1887313589}
-    - target: {fileID: 2751463347141186205, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8140155127365895493, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8140155127373330225, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
       propertyPath: m_Name
       value: Enemy_Orc
       objectReference: {fileID: 0}
     - target: {fileID: 8140155127373687505, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.59643775
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8140155127373687505, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.000012636185
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8140155127373687505, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.0011253357
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8140155127373687505, guid: 12ec164ec0abd4c498d2839982a7f128, type: 3}
       propertyPath: m_LocalRotation.w

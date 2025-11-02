@@ -5141,7 +5141,7 @@ GameObject:
   - component: {fileID: 6732564896168112282}
   m_Layer: 0
   m_Name: Gatling_Gun
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15289,7 +15289,7 @@ GameObject:
   - component: {fileID: 2751846948313293404}
   m_Layer: 0
   m_Name: Sphere
-  m_TagString: Untagged
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
