@@ -51,6 +51,16 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         public int AtkDamage { get; set;}
         [SerializeField] private int _atkDamage = 2;
 
+        private void OnEnable()
+        {
+            EventService.Instance.OnEnemyDie.AddListener(OnEnemyDie);
+        }
+
+        private void OnDisable()
+        {
+            EventService.Instance.OnEnemyDie.RemoveListener(OnEnemyDie);
+        }
+
         // Use this for initialization
         void Start()
         {
@@ -201,6 +211,20 @@ namespace GameDevHQ.FileBase.Gatling_Gun
             }
         }
 
+        private void OnEnemyDie(Enemy enemy)
+        {
+            _enemies.Remove(enemy);
+            if (_enemies.Count > 0)
+            {
+                _hasTarget = true;
+                AimTarget aimPoint = _enemies[0].GetComponentInChildren<AimTarget>();
+                _currentTarget = aimPoint.transform;
+            }
+            else
+            {
+                _hasTarget = false;
+                _currentTarget = null;
+            }
+        }
     }
-
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-
+[RequireComponent(typeof(Dissolve))]
 public class Enemy : MonoBehaviour , IDamageable , IAttack
 {
     public float Health { get; set; }
@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
     private WaitForSeconds _attackRoutineSeconds = new WaitForSeconds(1.5f);
     private Animator _anim;
     private NavMeshAgent _agent;
+    private Dissolve _dissolve;
 
     [SerializeField] private int _atkDamage = 20;
     [SerializeField] private Transform[] _targets;
@@ -35,6 +36,7 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
     {
         AtkDamage = _atkDamage;
         Health = _health;
+
         _anim = GetComponent<Animator>();
         if (_anim == null)
         {
@@ -52,6 +54,12 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
             _agent.speed = _speed;
 
             _agent.SetDestination(_targets[_currentTarget].position);
+        }
+
+        _dissolve = GetComponent<Dissolve>();
+        if(_dissolve == null)
+        {
+            Debug.LogError("Dissolve is NULL");
         }
     }
 
@@ -102,9 +110,18 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
 
         else if(Health < 1 && !_isDead)
         {
-            _isDead = true;
-            Debug.Log(gameObject.name + " Dead");
+            Death();
         }
+    }
+
+    private void Death()
+    {
+        _isDead = true;
+        _anim.SetTrigger("Death");
+        GetComponent<CapsuleCollider>().enabled = false;
+        EventService.Instance.OnEnemyDie.InvokeEvent(this);
+        _dissolve.StartDissolveRoutine();
+        this.enabled = false;
     }
 
     private void OnTriggerEnter(Collider other)

@@ -27,6 +27,9 @@ public class EventService
     public EventController OnItemNotPreview { get; private set; }
     public EventController OnItemSpawned { get; private set; }
 
+    //Enemy
+    public EventController<Enemy> OnEnemyDie { get; private set; }
+
     public EventService ()
     {
         OnItemSelected = new EventController<GameObject,int> ();
@@ -35,5 +38,6 @@ public class EventService
         OnActionPerformed = new EventController();
         OnItemSpawned = new EventController();
         OnActionCancel = new EventController();
+        OnEnemyDie = new EventController<Enemy> ();
     }
 }

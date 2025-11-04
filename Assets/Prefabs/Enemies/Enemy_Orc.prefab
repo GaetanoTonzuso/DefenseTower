@@ -1838,6 +1838,7 @@ GameObject:
   - component: {fileID: 5412111456025399843}
   - component: {fileID: 2751463347141186205}
   - component: {fileID: 2424117816616241002}
+  - component: {fileID: 871927006231922676}
   m_Layer: 0
   m_Name: Enemy_Orc
   m_TagString: Enemy
@@ -1925,7 +1926,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -1967,11 +1968,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7457d4f295dd5e7429263414a3ab25c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _health: 100
   _atkDamage: 20
   _targets:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &871927006231922676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8140155127373330225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d78ffe976b9347b4b9232bc0170303f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dissolveTime: 5
+  _mat: {fileID: 0}
 --- !u!1 &8140155127373330229
 GameObject:
   m_ObjectHideFlags: 0
@@ -2058,7 +2074,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 816bdd04d477349b19b3ecd831da3111, type: 2}
+  - {fileID: 2100000, guid: 6d1094fb97361164c9cf5e60c6e27d61, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
