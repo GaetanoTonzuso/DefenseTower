@@ -11,7 +11,7 @@ namespace GameDevHQ.FileBase.Missile_Launcher.Missile
 {
     [RequireComponent(typeof(Rigidbody))] //require rigidbody
     [RequireComponent(typeof(AudioSource))] //require audiosource
-    public class Missile : MonoBehaviour
+    public class Missile : MonoBehaviour, IAttack
     {
         [SerializeField]
         private ParticleSystem _particle; //reference to the particle system
@@ -37,9 +37,13 @@ namespace GameDevHQ.FileBase.Missile_Launcher.Missile
         private Missile_Launcher.MissileType _missileType;
         private Transform _target;
 
+        [SerializeField] private int _atk = 50;
+        public int AtkDamage { get; set; }
+
         // Use this for initialization
         IEnumerator Start()
         {
+            AtkDamage = _atk;
             _rigidbody = GetComponent<Rigidbody>(); //assign the rigidbody component 
             _audioSource = GetComponent<AudioSource>(); //assign the audiosource component
             _audioSource.pitch = Random.Range(0.7f, 1.9f); //randomize the pitch of the rocket audio
@@ -123,12 +127,21 @@ namespace GameDevHQ.FileBase.Missile_Launcher.Missile
 
         private void OnCollisionEnter(Collision other)
         {
-            Destroy(other.gameObject); //destroy collided object
-
             if (_explosionPrefab != null)
                 Instantiate(_explosionPrefab, transform.position, Quaternion.identity); //instantiate explosion
 
+            if(other.collider.TryGetComponent<IDamageable>(out IDamageable damageable))
+            {
+                damageable.Damage(AtkDamage);
+            }
+
+
             Destroy(this.gameObject); //destroy the rocket (this)
+        }
+
+        public void Attack()
+        {
+
         }
     }
 }

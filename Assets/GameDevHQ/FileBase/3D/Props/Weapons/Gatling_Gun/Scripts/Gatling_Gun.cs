@@ -48,8 +48,8 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         [SerializeField] private float _health = 30f;
         public float Health { get; set;}
 
-        public int AtkDamage { get; set;}
         [SerializeField] private int _atkDamage = 2;
+        public int AtkDamage { get; set;}
 
         private void OnEnable()
         {
@@ -204,7 +204,6 @@ namespace GameDevHQ.FileBase.Gatling_Gun
                     IDamageable damageable = hit.collider.GetComponent<IDamageable>();
                     if(damageable != null)
                     {
-                        Debug.Log("Hit: " + hit.collider.name);
                         damageable.Damage(AtkDamage);
                     }
                 }

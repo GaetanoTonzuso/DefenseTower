@@ -1968,7 +1968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7457d4f295dd5e7429263414a3ab25c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 100
+  _health: 450
   _atkDamage: 20
   _targets:
   - {fileID: 0}
@@ -1986,7 +1986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78ffe976b9347b4b9232bc0170303f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dissolveTime: 5
+  _dissolveTime: 7
   _mat: {fileID: 0}
 --- !u!1 &8140155127373330229
 GameObject:

@@ -27,13 +27,20 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _warfunds = 500;
     public int currentWarfunds { get {  return _warfunds; } }
 
+    private void Start()
+    {
+        UIManager.instance.UpdateWarfunds(_warfunds);
+    }
+
     public void AddWarfunds(int fundsToAdd)
     {
         _warfunds += fundsToAdd;
+        UIManager.instance.UpdateWarfunds(_warfunds);
     }
 
     public void RemoveWarfunds(int fundsToRemove)
     {
         _warfunds -= fundsToRemove;
+        UIManager.instance.UpdateWarfunds(_warfunds);
     }
 }

@@ -6,7 +6,7 @@ namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret.Missle
 {
     [RequireComponent(typeof(Rigidbody))] //require rigidbody
     [RequireComponent(typeof(AudioSource))] //require audiosource
-    public class Missle : MonoBehaviour
+    public class Missle : MonoBehaviour , IAttack
     {
         [SerializeField]
         private ParticleSystem _particle; //reference to the particle system
@@ -28,10 +28,14 @@ namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret.Missle
         private bool _fuseOut = false; //bool for if the rocket fuse
         private bool _trackRotation = false; //bool to track rotation of the rocket
 
+        [SerializeField] private int _atkDamage = 50;
+        public int AtkDamage { get; set; }    
+
 
         // Use this for initialization
         IEnumerator Start()
         {
+            AtkDamage = _atkDamage;
             _rigidbody = GetComponent<Rigidbody>(); //assign the rigidbody component 
             _audioSource = GetComponent<AudioSource>(); //assign the audiosource component
             _audioSource.pitch = Random.Range(0.7f, 1.9f); //randomize the pitch of the rocket audio
@@ -90,6 +94,20 @@ namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret.Missle
             _power = power; //set the power
             _fuseDelay = fuseDelay; //set the fuse delay
             Destroy(this.gameObject, destroyTimer); //destroy the rocket after destroyTimer 
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if(other.TryGetComponent<IDamageable>(out IDamageable damageable))
+            {
+                damageable.Damage(AtkDamage);
+                Attack();
+            }
+        }
+
+        public void Attack()
+        {         
+            Destroy(this.gameObject, 0.5f);
         }
     }
 }

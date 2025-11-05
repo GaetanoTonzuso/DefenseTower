@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using GameDevHQ.FileBase.Missile_Launcher.Missile;
 
-/*
- *@author GameDevHQ 
- * For support, visit gamedevhq.com
- */
 
 namespace GameDevHQ.FileBase.Missile_Launcher
 {
-    public class Missile_Launcher : MonoBehaviour
+    public class Missile_Launcher : MonoBehaviour,IDamageable
     {
         public enum MissileType
         {
@@ -41,14 +37,69 @@ namespace GameDevHQ.FileBase.Missile_Launcher
         [SerializeField]
         private Transform _target; //Who should the rocket fire at?
 
+        //Targets and Rotation settings
+        [SerializeField] private GameObject _turret;
+        [SerializeField] private float _rotationSpeed = 3f;
+        [SerializeField] private List<Enemy> _enemies = new List<Enemy>();
+        [SerializeField] private Transform _currentTarget;
+
+        Vector3 directionTarget;
+        Quaternion targetDirection;
+        private bool _hasTarget;
+
+        //Turret Health
+        [SerializeField] private float _health = 30f;
+        public float Health { get; set; }
+
+        private void OnEnable()
+        {
+            EventService.Instance.OnEnemyDie.AddListener(OnEnemyDie);
+        }
+
+        private void OnDisable()
+        {
+            EventService.Instance.OnEnemyDie.RemoveListener(OnEnemyDie);
+        }
+
+        private void Start()
+        {
+            Health = _health;   
+        }
 
         private void Update()
         {
-            /*if (Input.GetKeyDown(KeyCode.Space) && _launched == false) //check for space key and if we launched the rockets
+            AimTarget();
+        }
+
+        private void AimTarget()
+        {
+            if (_hasTarget)
+            {
+                Vector3 targetPos = _currentTarget.position + Vector3.up * -0.6f;
+                directionTarget = targetPos - _turret.transform.position;
+
+                if (directionTarget.sqrMagnitude < 0.001f) return;
+
+                targetDirection = Quaternion.LookRotation(directionTarget);
+
+                _turret.transform.rotation = Quaternion.Slerp(_turret.transform.rotation, targetDirection, Time.deltaTime * _rotationSpeed);
+
+                //Check if we are aiming it and then fire
+                float angleDifference = Quaternion.Angle(_turret.transform.rotation, targetDirection);
+                if (angleDifference < 1.5f)
+                {
+                    Attack();
+                }
+            }
+        }
+
+        private void Attack()
+        {
+            if (_launched == false) // if we launched the rockets
             {
                 _launched = true; //set the launch bool to true
                 StartCoroutine(FireRocketsRoutine()); //start a coroutine that fires the rockets. 
-            }*/
+            }
         }
 
         IEnumerator FireRocketsRoutine()
@@ -76,6 +127,75 @@ namespace GameDevHQ.FileBase.Missile_Launcher
             }
 
             _launched = false; //set launch bool to false
+        }
+
+      
+        public void Damage(float damage)
+        {
+            Health -= damage;
+            Debug.Log("Current Health: " + Health);
+            if (Health < 1)
+            {
+                Debug.Log("Destroy this turret");
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Enemy"))
+            {
+                _enemies.Add(other.GetComponent<Enemy>());
+                if (_enemies.Count > 0)
+                {
+                    _hasTarget = true;
+                    AimTarget aimPoint = _enemies[0].GetComponentInChildren<AimTarget>();
+                    _currentTarget = aimPoint.transform;
+                }
+            }
+
+            if (other.CompareTag("EnemyWeapon"))
+            {
+                if (Health > 0)
+                {
+                    IAttack attack = other.GetComponentInParent<IAttack>();
+                    Damage(attack.AtkDamage);
+                }
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Enemy"))
+            {
+                _enemies.Remove(other.GetComponent<Enemy>());
+                if (_enemies.Count > 0)
+                {
+                    _hasTarget = true;
+                    AimTarget aimPoint = _enemies[0].GetComponentInChildren<AimTarget>();
+                    _currentTarget = aimPoint.transform;
+                }
+                else
+                {
+                    _hasTarget = false;
+                    _currentTarget = null;
+                }
+            }
+        }
+
+        private void OnEnemyDie(Enemy enemy)
+        {
+            _enemies.Remove(enemy);
+            if (_enemies.Count > 0)
+            {
+                _hasTarget = true;
+                AimTarget aimPoint = _enemies[0].GetComponentInChildren<AimTarget>();
+                _currentTarget = aimPoint.transform;
+            }
+            else
+            {
+                _hasTarget = false;
+                _currentTarget = null;
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ public class Dissolve : MonoBehaviour
 
     private Coroutine _dissolveRoutine;
     private WaitForSeconds _waitSeconds = new WaitForSeconds(1f);
-    private WaitForSeconds _destroyWaitSeconds = new WaitForSeconds(8f);
+    private WaitForSeconds _destroyWaitSeconds = new WaitForSeconds(6f);
 
     private float _lerpDissolve;
     private int _dissolveAmount = Shader.PropertyToID("_DissolveAmount");
