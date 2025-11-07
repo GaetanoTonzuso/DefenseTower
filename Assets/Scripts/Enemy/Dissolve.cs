@@ -40,6 +40,6 @@ public class Dissolve : MonoBehaviour
         }
         _dissolveRoutine = null;
         yield return _destroyWaitSeconds;
-        Destroy(this.gameObject);
+        transform.parent.gameObject.SetActive(false);
     }
 }

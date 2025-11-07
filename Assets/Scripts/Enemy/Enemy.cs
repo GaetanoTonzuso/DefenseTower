@@ -25,7 +25,19 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
     private Dissolve _dissolve;
 
     [SerializeField] private int _atkDamage = 20;
-    [SerializeField] private Transform[] _targets;
+    [SerializeField] private GameObject[] _targets;
+
+
+    private void OnEnable()
+    {
+        _targets = GameObject.FindGameObjectsWithTag("Target");
+        if (_agent != null)
+        {
+            _agent.speed = _speed;
+
+            _agent.SetDestination(_targets[_currentTarget].transform.position);
+        }
+    }
 
     private void Start()
     {
@@ -53,7 +65,7 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
         {
             _agent.speed = _speed;
 
-            _agent.SetDestination(_targets[_currentTarget].position);
+            _agent.SetDestination(_targets[_currentTarget].transform.position);
         }
 
         _dissolve = GetComponent<Dissolve>();
@@ -83,7 +95,7 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
                 _currentTarget++;
                 if (_currentTarget < _targets.Length)
                 {
-                    _agent.SetDestination(_targets[_currentTarget].position);
+                    _agent.SetDestination(_targets[_currentTarget].transform.position);
                 }
                 else
                 {
@@ -121,7 +133,7 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
         GetComponent<CapsuleCollider>().enabled = false;
         EventService.Instance.OnEnemyDie.InvokeEvent(this);
         _dissolve.StartDissolveRoutine();
-        this.enabled = false;
+        //Dissolve will disable at end of routine
     }
 
     private void OnTriggerEnter(Collider other)
@@ -142,7 +154,7 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
         {
             _agent.stoppingDistance = 0f;
             _hasDetectedTower = false;
-            _agent.SetDestination(_targets[_currentTarget].position);
+            _agent.SetDestination(_targets[_currentTarget].transform.position);
         }
     }
 

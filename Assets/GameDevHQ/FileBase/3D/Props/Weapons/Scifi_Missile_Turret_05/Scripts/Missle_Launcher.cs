@@ -5,7 +5,7 @@ using GameDevHQ.FileBase.Missle_Launcher_Dual_Turret.Missle;
 
 namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret
 {
-    public class Missle_Launcher : MonoBehaviour
+    public class Missle_Launcher : MonoBehaviour, IDamageable
     {
         [SerializeField]
         private GameObject _missilePrefab; //holds the missle gameobject to clone
@@ -27,13 +27,59 @@ namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret
         private float _destroyTime = 10.0f; //how long till the rockets get cleaned up
         private bool _launched; //bool to check if we launched the rockets
 
+        //Targets and Rotation settings
+        [SerializeField] private GameObject _turret;
+        [SerializeField] private float _rotationSpeed = 3f;
+        [SerializeField] private List<Enemy> _enemies = new List<Enemy>();
+        [SerializeField] private Transform _currentTarget;
+
+        Vector3 directionTarget;
+        Quaternion targetDirection;
+        private bool _hasTarget;
+
+        [SerializeField] private float _health = 80f;
+        public float Health { get; set; }
+
+        private void OnEnable()
+        {
+            EventService.Instance.OnEnemyDie.AddListener(OnEnemyDie);
+        }
+
+        private void OnDisable()
+        {
+            EventService.Instance.OnEnemyDie.RemoveListener(OnEnemyDie);
+        }
+
+        private void Start()
+        {
+            Health = _health;
+        }
+
         private void Update()
         {
-            /*if (Input.GetKeyDown(KeyCode.Space) && _launched == false) //check for space key and if we launched the rockets
+            AimTarget();
+        }
+
+        private void AimTarget()
+        {
+            if (_hasTarget)
             {
-                _launched = true; //set the launch bool to true
-                StartCoroutine(FireRocketsRoutine()); //start a coroutine that fires the rockets. 
-            }*/
+                Vector3 targetPos = _currentTarget.position + Vector3.up * -0.6f;
+                directionTarget = targetPos - _turret.transform.position;
+
+                if (directionTarget.sqrMagnitude < 0.001f) return;
+
+                targetDirection = Quaternion.LookRotation(directionTarget);
+
+                _turret.transform.rotation = Quaternion.Slerp(_turret.transform.rotation, targetDirection, Time.deltaTime * _rotationSpeed);
+
+                //Check if we are aiming it and then fire
+                float angleDifference = Quaternion.Angle(_turret.transform.rotation, targetDirection);
+                if (angleDifference < 1.5f)
+                {
+                    Attack();
+                }
+            }
         }
 
         IEnumerator FireRocketsRoutine()
@@ -72,6 +118,65 @@ namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret
             }
 
             _launched = false; //set launch bool to false
+        }
+
+        public void Damage(float damage)
+        {
+            Health -= damage;
+            Debug.Log("Current Health: " + Health);
+            if (Health < 1)
+            {
+                Debug.Log("Destroy this turret");
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Enemy"))
+            {
+                _enemies.Add(other.GetComponent<Enemy>());
+                if (_enemies.Count > 0)
+                {
+                    _hasTarget = true;
+                    AimTarget aimPoint = _enemies[0].GetComponentInChildren<AimTarget>();
+                    _currentTarget = aimPoint.transform;
+                }
+            }
+
+            if (other.CompareTag("EnemyWeapon"))
+            {
+                if (Health > 0)
+                {
+                    IAttack attack = other.GetComponentInParent<IAttack>();
+                    Damage(attack.AtkDamage);
+                }
+            }
+        }
+
+        private void Attack()
+        {
+            if (_launched == false) // if we launched the rockets
+            {
+                _launched = true; //set the launch bool to true
+                StartCoroutine(FireRocketsRoutine()); //start a coroutine that fires the rockets. 
+            }
+        }
+
+        private void OnEnemyDie(Enemy enemy)
+        {
+            _enemies.Remove(enemy);
+            if (_enemies.Count > 0)
+            {
+                _hasTarget = true;
+                AimTarget aimPoint = _enemies[0].GetComponentInChildren<AimTarget>();
+                _currentTarget = aimPoint.transform;
+                StopCoroutine(FireRocketsRoutine());
+            }
+            else
+            {
+                _hasTarget = false;
+                _currentTarget = null;
+            }
         }
     }
 }
