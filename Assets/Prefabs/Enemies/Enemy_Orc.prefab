@@ -1926,7 +1926,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -1968,7 +1968,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7457d4f295dd5e7429263414a3ab25c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 350
+  _health: 400
+  _target: {fileID: 0}
   _atkDamage: 20
   _targets:
   - {fileID: 0}
@@ -1986,7 +1987,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78ffe976b9347b4b9232bc0170303f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dissolveTime: 7
+  _dissolveTime: 5
   _mat: {fileID: 0}
 --- !u!1 &8140155127373330229
 GameObject:

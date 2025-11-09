@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
         {
             if(_instance == null )
             {
-                _instance = new GameManager();
+                Debug.LogError("Gamemaneger instance is NULL");
             }
             return _instance;
         }
@@ -22,8 +22,14 @@ public class GameManager : MonoBehaviour
         _instance = this;
     }
 
+    private void OnEnable()
+    {
+        EventService.Instance.OnEnemyDie.AddListener(OnEnemyDie);
+    }
+
     [Header("Game Settings")]
-    [SerializeField] private int _lives = 20;
+    [SerializeField] private int _lives = 5;
+    public int Lives { get { return _lives; }}
     [SerializeField] private int _warfunds = 500;
     public int currentWarfunds { get {  return _warfunds; } }
 
@@ -42,5 +48,10 @@ public class GameManager : MonoBehaviour
     {
         _warfunds -= fundsToRemove;
         UIManager.instance.UpdateWarfunds(_warfunds);
+    }
+
+    private void OnEnemyDie(Enemy enemy)
+    {
+        AddWarfunds(enemy.WarfundsCredits);
     }
 }

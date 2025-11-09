@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,12 +14,13 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
     private float _speed = 1.5f;
     
 
-    private int _currentTarget;
+    private int _currentTargetId;
     private int _warfundsCredits = 150;
+    public int WarfundsCredits { get { return _warfundsCredits; } }
     private bool _hasDetectedTower;
     private bool _isDead;
 
-    private Transform _target;
+    [SerializeField] private Transform _target;
     private Coroutine _attackRoutine;
     private WaitForSeconds _attackRoutineSeconds = new WaitForSeconds(1.5f);
     private Animator _anim;
@@ -30,12 +33,15 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
 
     private void OnEnable()
     {
+        //Get the targets and sort by TargetID
         _targets = GameObject.FindGameObjectsWithTag("Target");
+        _targets = _targets.OrderBy(go => go.transform.GetComponent<Target>().TargetId).ToArray();
+
         if (_agent != null)
         {
             _agent.speed = _speed;
 
-            _agent.SetDestination(_targets[_currentTarget].transform.position);
+            _agent.SetDestination(_targets[_currentTargetId].transform.position);
         }
     }
 
@@ -65,7 +71,7 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
         {
             _agent.speed = _speed;
 
-            _agent.SetDestination(_targets[_currentTarget].transform.position);
+            _agent.SetDestination(_targets[_currentTargetId].transform.position);
         }
 
         _dissolve = GetComponent<Dissolve>();
@@ -88,14 +94,14 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
 
     private void MoveAI()
     {
-        if (_hasDetectedTower || _agent == null) return;
+        if (_hasDetectedTower || _agent == null || _target != null) return;
 
         if(_agent.remainingDistance < 0.8f)
             {
-                _currentTarget++;
-                if (_currentTarget < _targets.Length)
+                _currentTargetId++;
+                if (_currentTargetId < _targets.Length)
                 {
-                    _agent.SetDestination(_targets[_currentTarget].transform.position);
+                    _agent.SetDestination(_targets[_currentTargetId].transform.position);
                 }
                 else
                 {
@@ -143,7 +149,7 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
             _agent.stoppingDistance = 1.5f;
             _hasDetectedTower = true;
             _target = other.transform.parent;
-
+            _agent.SetDestination(_target.position);
             Attack();
         }
     }
@@ -154,19 +160,19 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
         {
             _agent.stoppingDistance = 0f;
             _hasDetectedTower = false;
-            _agent.SetDestination(_targets[_currentTarget].transform.position);
+            _agent.SetDestination(_targets[_currentTargetId].transform.position);
         }
     }
 
     IEnumerator AttackRoutine()
     {
-        _agent.SetDestination(_target.position);
+        
         while(Vector3.Distance(transform.position,_target.position) > _agent.stoppingDistance)
-        {
+        {         
             yield return null;
         }
 
-        _agent.isStopped = true;
+       _agent.isStopped = true;
 
         while (Vector3.Distance(transform.position, _target.position) <= _agent.stoppingDistance)
         {

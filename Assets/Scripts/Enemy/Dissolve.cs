@@ -10,7 +10,7 @@ public class Dissolve : MonoBehaviour
 
     private Coroutine _dissolveRoutine;
     private WaitForSeconds _waitSeconds = new WaitForSeconds(1f);
-    private WaitForSeconds _destroyWaitSeconds = new WaitForSeconds(6f);
+    private WaitForSeconds _disableWaitSeconds = new WaitForSeconds(6f);
 
     private float _lerpDissolve;
     private int _dissolveAmount = Shader.PropertyToID("_DissolveAmount");
@@ -39,7 +39,7 @@ public class Dissolve : MonoBehaviour
             yield return null;
         }
         _dissolveRoutine = null;
-        yield return _destroyWaitSeconds;
+        yield return _disableWaitSeconds;
         transform.parent.gameObject.SetActive(false);
     }
 }

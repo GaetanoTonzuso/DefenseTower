@@ -30,6 +30,9 @@ public class EventService
     //Enemy
     public EventController<Enemy> OnEnemyDie { get; private set; }
 
+    //Waves
+    public EventController<int,int> OnWaveBegin { get; private set; }
+
     public EventService ()
     {
         OnItemSelected = new EventController<GameObject,int> ();
@@ -39,5 +42,6 @@ public class EventService
         OnItemSpawned = new EventController();
         OnActionCancel = new EventController();
         OnEnemyDie = new EventController<Enemy> ();
+        OnWaveBegin = new EventController<int,int>();
     }
 }

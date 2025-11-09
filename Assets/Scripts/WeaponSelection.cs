@@ -54,14 +54,18 @@ public class WeaponSelection : MonoBehaviour
         Vector3 spawnPos = Camera.main.ScreenToWorldPoint(new Vector3(_mousePos.x, _mousePos.y, _z));
 
         _currentItem = Instantiate(itemSelected, spawnPos, Quaternion.identity);
+        foreach(Collider col in _currentItem.GetComponentsInChildren<Collider>())
+        {
+            col.enabled = false;
+        }
     }
 
-    private void OnItemPreview()
+    private void OnItemPreview() //Inform Place Zone
     {
         _isPreviewing = true;
     }
 
-    private void OnItemNotPreview()
+    private void OnItemNotPreview() //Inform Place Zone
     {
         _isPreviewing = false;
     }

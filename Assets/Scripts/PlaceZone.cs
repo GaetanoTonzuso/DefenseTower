@@ -34,9 +34,17 @@ public class PlaceZone : MonoBehaviour, IInteractable
         _redPlaceEffect.Play();
     }
 
+    //Set our Prefab for previewing when on Place
     private void OnItemSelected(GameObject weaponSelected , int itemCost)
     {
         _itemPreviewPrefab = weaponSelected;
+
+        //Disable all sphere colliders for our Weapons
+        foreach (Collider col in _itemPreviewPrefab.GetComponentsInChildren<Collider>())
+        {
+            col.enabled = false;
+        }
+
         _currentItemCost = itemCost;
     }
 
@@ -48,7 +56,7 @@ public class PlaceZone : MonoBehaviour, IInteractable
             if (!_previewSpawned && _isInteracting == true)
             {
                 if(GameManager.instance.currentWarfunds >= _currentItemCost && _itemPreviewPrefab != null)
-                {
+                {                
                     EventService.Instance.OnActionPerformed.AddListener(SpawnWeapon);
                 }
                 else
@@ -56,7 +64,11 @@ public class PlaceZone : MonoBehaviour, IInteractable
                     Debug.Log("Not funds");
                 }
                 _previewSpawned = true;
+                
+                //Instantiate weapon selected
                 _itemClone = Instantiate(_itemPreviewPrefab,transform.position, Quaternion.identity);
+                
+               
 
                 //Send signal to WeaponSelection that the place is previewing the Tower/Weapon
                 EventService.Instance.OnItemPreview.InvokeEvent();
@@ -106,15 +118,18 @@ public class PlaceZone : MonoBehaviour, IInteractable
 
     private void SpawnWeapon()
     {
-        Debug.Log("Placed");
-        //Se clicco mi deve togliere l arma selezionata e lasciare 
+        //Enable all sphere colliders for our Weapons
+        foreach (Collider col in _itemClone.GetComponentsInChildren<Collider>())
+        {
+            col.enabled = true;
+        }
         GameManager.instance.RemoveWarfunds(_currentItemCost);
-        EventService.Instance.OnItemSpawned.InvokeEvent();
+        EventService.Instance.OnItemSpawned.InvokeEvent();      
         _canPlace = false;     
     }
 
     private void OnItemSpawned()
-    {
+    {     
         _previewSpawned = false;
         _currentItemCost = 0;
         _itemPreviewPrefab = null;
