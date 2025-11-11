@@ -34,6 +34,9 @@ namespace GameDevHQ.FileBase.Dual_Gatling_Gun
         private bool _hasTarget;
         private bool _isShooting;
 
+        [SerializeField] private float _fireRate = 0.5f;
+        private float _nextFire = 0;
+
         //Turret Health
         [SerializeField] private float _health = 75f;
         public float Health { get; set; }
@@ -74,7 +77,11 @@ namespace GameDevHQ.FileBase.Dual_Gatling_Gun
         {
             if (!_isShooting) return;
 
-            Attack();
+            if (Time.time > _nextFire)
+            {
+                _nextFire = _fireRate + Time.time;
+                Attack();
+            }
         }
 
         private void AimTarget()

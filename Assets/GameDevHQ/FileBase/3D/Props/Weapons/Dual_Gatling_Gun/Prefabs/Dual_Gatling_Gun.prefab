@@ -29990,7 +29990,8 @@ MonoBehaviour:
   _rotationSpeed: 3
   _enemies: []
   _currentTarget: {fileID: 0}
-  _health: 75
+  _fireRate: 0.2
+  _health: 100
   _atkDamage: 4
 --- !u!82 &82127826341503972
 AudioSource:
@@ -30111,7 +30112,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -30242,7 +30243,7 @@ GameObject:
   - component: {fileID: 6885518640962795297}
   - component: {fileID: 705042911898093434}
   - component: {fileID: 6197495348644367153}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sphere
   m_TagString: Turret
   m_Icon: {fileID: 0}

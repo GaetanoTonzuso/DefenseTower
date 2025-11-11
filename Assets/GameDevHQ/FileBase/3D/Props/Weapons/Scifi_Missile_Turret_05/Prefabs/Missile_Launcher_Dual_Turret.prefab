@@ -1133,15 +1133,16 @@ MonoBehaviour:
   - {fileID: 1770064571432884}
   _fireDelay: 1
   _launchSpeed: 10
-  _power: 20
+  _power: 60
   _fuseDelay: 0
   _reloadTime: 0
   _destroyTime: 10
+  _fireRate: 12
   _turret: {fileID: 1319434493914340}
   _rotationSpeed: 3
   _enemies: []
   _currentTarget: {fileID: 0}
-  _health: 80
+  _health: 110
 --- !u!54 &2359313068256738525
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1519,7 +1520,7 @@ GameObject:
   - component: {fileID: 1663326816907225331}
   - component: {fileID: 7014078653663622254}
   - component: {fileID: 3421221626399395485}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sphere
   m_TagString: Turret
   m_Icon: {fileID: 0}
@@ -1556,7 +1557,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6012632279394534151}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

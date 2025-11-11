@@ -5179,6 +5179,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _firePoint: {fileID: 1816919444378479456}
   _fireDistance: 30
+  _fireRate: 0.2
   Muzzle_Flash: {fileID: 1905276477678454}
   bulletCasings: {fileID: 198239830521320308}
   fireSound: {fileID: 8300000, guid: 08e0cb88300e54b09aa0deb684c3a3de, type: 3}
@@ -5186,7 +5187,7 @@ MonoBehaviour:
   _rotationSpeed: 4.5
   _enemies: []
   _currentTarget: {fileID: 0}
-  _health: 30
+  _health: 80
   _atkDamage: 2
 --- !u!82 &82825197453988258
 AudioSource:
@@ -5307,7 +5308,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -15340,8 +15341,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 28.32, y: 0.08951882, z: 28.32}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 20.2, y: 0.06385171, z: 20.2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4633165491543876}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

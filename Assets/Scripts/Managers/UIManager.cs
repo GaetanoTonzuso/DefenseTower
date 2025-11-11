@@ -64,7 +64,7 @@ public class UIManager : MonoBehaviour
         _currentWaveText.text = currentWave.ToString() + " / " + maxWaves.ToString();
     }
 
-    private void UpdateLives(int lives)
+    public void UpdateLives(int lives)
     {
         _livesText.text = lives.ToString();
     }

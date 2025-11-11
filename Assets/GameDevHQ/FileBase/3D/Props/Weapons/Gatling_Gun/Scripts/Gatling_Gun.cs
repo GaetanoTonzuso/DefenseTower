@@ -24,6 +24,8 @@ namespace GameDevHQ.FileBase.Gatling_Gun
     {
         [SerializeField] private GameObject _firePoint; //Reference to hold Shooting Point
         [SerializeField] private float _fireDistance = 30f;
+        [SerializeField] private float _fireRate = 0.5f;
+        private float _nextFire = 0;
 
         private Transform _gunBarrel; //Reference to hold the gun barrel
         public GameObject Muzzle_Flash; //reference to the muzzle flash effect to play when firing
@@ -43,7 +45,8 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         Quaternion targetDirection;
         private bool _hasTarget;
         private bool _isShooting;
-        
+        RaycastHit hit;
+
         //Turret Health
         [SerializeField] private float _health = 30f;
         public float Health { get; set;}
@@ -78,13 +81,14 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         void Update()
         {         
             AimTarget();
-        }
 
-        private void FixedUpdate()
-        {
             if (!_isShooting) return;
 
-            Attack();
+            if (Time.time > _nextFire)
+            {
+                _nextFire = _fireRate + Time.time;
+                Attack();
+            }
         }
 
         private void AimTarget()
@@ -126,6 +130,7 @@ namespace GameDevHQ.FileBase.Gatling_Gun
                 Muzzle_Flash.SetActive(false); //turn off muzzle flash particle effect
                 _audioSource.Stop(); //stop the sound effect from playing
                 _startWeaponNoise = true; //set the start weapon noise value to true
+                _isShooting = false;
             }
         }
 
@@ -194,11 +199,8 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         }
 
         private void FireRay()
-        {
-            Debug.Log("Start Ray");
-            RaycastHit hit;
-            Debug.DrawRay(_firePoint.transform.position, _firePoint.transform.forward * _fireDistance, Color.red, 5f);
-            if(Physics.Raycast(_firePoint.transform.position,_firePoint.transform.forward,out hit,_fireDistance))
+        {        
+            if(Physics.Raycast(_firePoint.transform.position,_firePoint.transform.forward,out hit,_fireDistance, 1<<6))
             {
                 if(hit.collider != null)
                 {

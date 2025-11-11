@@ -9,8 +9,8 @@ public class Dissolve : MonoBehaviour
     private SkinnedMeshRenderer _skinnedMeshRenderer;
 
     private Coroutine _dissolveRoutine;
-    private WaitForSeconds _waitSeconds = new WaitForSeconds(1f);
-    private WaitForSeconds _disableWaitSeconds = new WaitForSeconds(6f);
+    private WaitForSeconds _waitSeconds = new WaitForSeconds(0.5f);
+    private WaitForSeconds _disableWaitSeconds = new WaitForSeconds(4f);
 
     private float _lerpDissolve;
     private int _dissolveAmount = Shader.PropertyToID("_DissolveAmount");
@@ -30,6 +30,7 @@ public class Dissolve : MonoBehaviour
     private IEnumerator DissolveRoutine()
     {
         yield return _waitSeconds;
+       
         float elapsedTime = 0f;
         while (elapsedTime < _dissolveTime)
         {
@@ -40,6 +41,8 @@ public class Dissolve : MonoBehaviour
         }
         _dissolveRoutine = null;
         yield return _disableWaitSeconds;
-        transform.parent.gameObject.SetActive(false);
+        GameManager.instance.UpdateEnemiesAlive();
+        yield return null;
+        transform.gameObject.SetActive(false);
     }
 }

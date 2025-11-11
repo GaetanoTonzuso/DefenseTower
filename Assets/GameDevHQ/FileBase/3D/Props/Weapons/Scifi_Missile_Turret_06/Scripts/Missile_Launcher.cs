@@ -47,6 +47,9 @@ namespace GameDevHQ.FileBase.Missile_Launcher
         Quaternion targetDirection;
         private bool _hasTarget;
 
+        [SerializeField] private float _fireRate = 0.5f;
+        private float _nextFire = 0;
+
         //Turret Health
         [SerializeField] private float _health = 30f;
         public float Health { get; set; }
@@ -88,7 +91,11 @@ namespace GameDevHQ.FileBase.Missile_Launcher
                 float angleDifference = Quaternion.Angle(_turret.transform.rotation, targetDirection);
                 if (angleDifference < 1.5f)
                 {
-                    Attack();
+                    if (Time.time > _nextFire)
+                    {
+                        _nextFire = _fireRate + Time.time;
+                        Attack();
+                    }
                 }
             }
         }
@@ -116,8 +123,9 @@ namespace GameDevHQ.FileBase.Missile_Launcher
                 rocket.GetComponent<GameDevHQ.FileBase.Missile_Launcher.Missile.Missile>().AssignMissleRules(_missileType, _target, _launchSpeed, _power, _fuseDelay, _destroyTime); //assign missle properties 
 
                 _misslePositions[i].SetActive(false); //turn off the rocket sitting in the turret to make it look like it fired
-
                 yield return new WaitForSeconds(_fireDelay); //wait for the firedelay
+                if (_currentTarget == null) yield return null;
+
             }
 
             for (int i = 0; i < _misslePositions.Length; i++) //itterate through missle positions

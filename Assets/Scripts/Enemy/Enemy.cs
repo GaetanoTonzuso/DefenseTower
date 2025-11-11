@@ -30,19 +30,45 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
     [SerializeField] private int _atkDamage = 20;
     [SerializeField] private GameObject[] _targets;
 
-
+    private SkinnedMeshRenderer _skinnedMesh;
+    private Material _mat;
+        
     private void OnEnable()
     {
-        //Get the targets and sort by TargetID
+        EnableObject();
+    }
+
+    private void EnableObject()
+    {
+        Health = _health;
+        _isDead = false;
+        _hasDetectedTower = false;
+        _attackRoutine = null;
+        _skinnedMesh = GetComponentInChildren<SkinnedMeshRenderer>();
+        _mat = _skinnedMesh.material;
+        _mat.SetFloat("_DissolveAmount", 0f);
+        GetComponent<CapsuleCollider>().enabled = true;
+
+        if (_anim != null)
+        {
+            _anim.ResetTrigger("Death");
+        }
+
         _targets = GameObject.FindGameObjectsWithTag("Target");
         _targets = _targets.OrderBy(go => go.transform.GetComponent<Target>().TargetId).ToArray();
 
         if (_agent != null)
         {
-            _agent.speed = _speed;
+            _agent.enabled = true;
 
-            _agent.SetDestination(_targets[_currentTargetId].transform.position);
-        }
+            if (NavMesh.SamplePosition((_targets[0].transform.position), out NavMeshHit hit, 2f, NavMesh.AllAreas))
+            {
+                _agent.Warp(hit.position);
+                _agent.speed = _speed;
+                _agent.isStopped = false;
+                _agent.SetDestination(_targets[_currentTargetId].transform.position);
+            }
+        }      
     }
 
     private void Start()
@@ -84,6 +110,22 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
 
     protected void Update()
     {
+        if (_hasDetectedTower && _target == null)
+        {
+            StopAttack();
+            _hasDetectedTower = false;
+
+            // Riprende il movimento verso il percorso
+            if (_agent != null && _currentTargetId < _targets.Length)
+            {
+                _agent.isStopped = false;
+                _agent.stoppingDistance = 0f;
+                _agent.SetDestination(_targets[_currentTargetId].transform.position);
+            }
+
+            return;
+        }
+
         if (_hasDetectedTower && _target != null)
         {
             transform.LookAt(_target);
@@ -94,9 +136,9 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
 
     private void MoveAI()
     {
-        if (_hasDetectedTower || _agent == null || _target != null) return;
+        if (_hasDetectedTower || _agent == null || _target != null && _hasDetectedTower) return;
 
-        if(_agent.remainingDistance < 0.8f)
+        if (_agent.remainingDistance < 0.5f && _agent != null)
             {
                 _currentTargetId++;
                 if (_currentTargetId < _targets.Length)
@@ -115,6 +157,15 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
         if (_attackRoutine == null)
         {
             _attackRoutine = StartCoroutine(AttackRoutine());
+        }
+    }
+
+    private void StopAttack()
+    {
+        if (_attackRoutine != null)
+        {
+            StopCoroutine(_attackRoutine);
+            _attackRoutine = null;
         }
     }
 
@@ -137,14 +188,17 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
         _isDead = true;
         _anim.SetTrigger("Death");
         GetComponent<CapsuleCollider>().enabled = false;
+        _agent.isStopped = true;
+        _agent.enabled = false;
         EventService.Instance.OnEnemyDie.InvokeEvent(this);
+        StopAttack();
         _dissolve.StartDissolveRoutine();
         //Dissolve will disable at end of routine
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Turret"))
+        if (other.CompareTag("Turret") && !_hasDetectedTower)
         {
             _agent.stoppingDistance = 1.5f;
             _hasDetectedTower = true;
@@ -165,8 +219,7 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
     }
 
     IEnumerator AttackRoutine()
-    {
-        
+    {       
         while(Vector3.Distance(transform.position,_target.position) > _agent.stoppingDistance)
         {         
             yield return null;

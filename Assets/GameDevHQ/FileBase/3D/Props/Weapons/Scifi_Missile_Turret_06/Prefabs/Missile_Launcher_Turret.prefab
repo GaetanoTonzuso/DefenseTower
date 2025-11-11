@@ -910,7 +910,7 @@ MonoBehaviour:
   - {fileID: 1441185981006382}
   _fireDelay: 2
   _launchSpeed: 10
-  _power: 20
+  _power: 35
   _fuseDelay: 0
   _reloadTime: 0
   _destroyTime: 10
@@ -919,7 +919,8 @@ MonoBehaviour:
   _rotationSpeed: 3
   _enemies: []
   _currentTarget: {fileID: 0}
-  _health: 30
+  _fireRate: 15
+  _health: 100
 --- !u!54 &6771075491736369708
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1042,7 +1043,7 @@ GameObject:
   - component: {fileID: 8001139423066013360}
   - component: {fileID: 4685894078324626100}
   - component: {fileID: 8683739290818161662}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sphere
   m_TagString: Turret
   m_Icon: {fileID: 0}
@@ -1059,8 +1060,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 40, y: 1, z: 40}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 25.05, y: 0.62624997, z: 25.05}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4508629992324016}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1079,7 +1080,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8090344550223537091}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1131,7 +1132,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}

@@ -27,6 +27,9 @@ namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret
         private float _destroyTime = 10.0f; //how long till the rockets get cleaned up
         private bool _launched; //bool to check if we launched the rockets
 
+        [SerializeField] private float _fireRate = 0.5f;
+        private float _nextFire = 0;
+
         //Targets and Rotation settings
         [SerializeField] private GameObject _turret;
         [SerializeField] private float _rotationSpeed = 3f;
@@ -77,7 +80,11 @@ namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret
                 float angleDifference = Quaternion.Angle(_turret.transform.rotation, targetDirection);
                 if (angleDifference < 1.5f)
                 {
-                    Attack();
+                    if (Time.time > _nextFire)
+                    {
+                        _nextFire = _fireRate + Time.time;
+                        Attack();
+                    }
                 }
             }
         }
