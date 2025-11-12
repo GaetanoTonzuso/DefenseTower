@@ -33,10 +33,12 @@ public class PlayerCamera : MonoBehaviour
 
     private void Initialization()
     {
+        _cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         if (_cam == null)
         {
             Debug.LogError("Camera is null on Camera object");
         }
+
     }
 
     private void Update()
@@ -47,32 +49,35 @@ public class PlayerCamera : MonoBehaviour
 
     private void MoveCamera()
     {
-        //Get Value for XY
-        _move = PlayerController.Instance.playerInput.Player.Movement.ReadValue<Vector2>();
-
-        //Check if we are moving to left,right up or down
-        if (_move.x < 0)
+        if (_cam != null)
         {
-            _cam.transform.Translate((Vector3.left * _movementSpeed) * Time.deltaTime);
-        }
+            //Get Value for XY
+            _move = PlayerController.Instance.playerInput.Player.Movement.ReadValue<Vector2>();
 
-        else if (_move.x > 0)
-        {
-            _cam.transform.Translate((Vector3.right * _movementSpeed) * Time.deltaTime);
-        }
+            //Check if we are moving to left,right up or down
+            if (_move.x < 0)
+            {
+                _cam.transform.Translate((Vector3.left * _movementSpeed) * Time.deltaTime);
+            }
 
-        if (_move.y < 0)
-        {
-            _cam.transform.Translate((Vector3.down * _movementSpeed) * Time.deltaTime);
-        }
+            else if (_move.x > 0)
+            {
+                _cam.transform.Translate((Vector3.right * _movementSpeed) * Time.deltaTime);
+            }
 
-        else if (_move.y > 0)
-        {
-            _cam.transform.Translate((Vector3.up * _movementSpeed) * Time.deltaTime);
-        }
+            if (_move.y < 0)
+            {
+                _cam.transform.Translate((Vector3.down * _movementSpeed) * Time.deltaTime);
+            }
 
-        _clampedPos = new Vector3(Mathf.Clamp(_cam.transform.position.x, _xMin, _xMax), Mathf.Clamp(_cam.transform.position.y, _yMin, _yMax), Mathf.Clamp(_cam.transform.position.z, _zMin, _zMax));
-        _cam.transform.position = _clampedPos;
+            else if (_move.y > 0)
+            {
+                _cam.transform.Translate((Vector3.up * _movementSpeed) * Time.deltaTime);
+            }
+
+            _clampedPos = new Vector3(Mathf.Clamp(_cam.transform.position.x, _xMin, _xMax), Mathf.Clamp(_cam.transform.position.y, _yMin, _yMax), Mathf.Clamp(_cam.transform.position.z, _zMin, _zMax));
+            _cam.transform.position = _clampedPos;
+        }
     }
 
     private void Zoom()

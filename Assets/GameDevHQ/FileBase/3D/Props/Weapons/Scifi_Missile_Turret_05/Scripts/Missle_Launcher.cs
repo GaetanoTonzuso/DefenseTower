@@ -5,7 +5,7 @@ using GameDevHQ.FileBase.Missle_Launcher_Dual_Turret.Missle;
 
 namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret
 {
-    public class Missle_Launcher : MonoBehaviour, IDamageable
+    public class Missle_Launcher : MonoBehaviour, IDamageable , IWeapon
     {
         [SerializeField]
         private GameObject _missilePrefab; //holds the missle gameobject to clone
@@ -29,6 +29,8 @@ namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret
 
         [SerializeField] private float _fireRate = 0.5f;
         private float _nextFire = 0;
+
+        [SerializeField] private GameObject _explosionPrefab;
 
         //Targets and Rotation settings
         [SerializeField] private GameObject _turret;
@@ -133,7 +135,8 @@ namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret
             Debug.Log("Current Health: " + Health);
             if (Health < 1)
             {
-                Debug.Log("Destroy this turret");
+                Instantiate(_explosionPrefab,transform.position,Quaternion.identity);
+                Destroy(this.gameObject, 0.3f);
             }
         }
 

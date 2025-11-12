@@ -7,7 +7,7 @@ public class PlayerRaycast : MonoBehaviour
 {
     [SerializeField] private Camera _cam;
 
-    private PlayerInput _playerInput;
+    private PlayerControls _playerInput;
     private Ray _ray;
     private RaycastHit _hitInfo;
     private Vector2 _mousePos;
@@ -16,8 +16,13 @@ public class PlayerRaycast : MonoBehaviour
 
     private void Start()
     {
-        _playerInput = new PlayerInput();
+        _playerInput = new PlayerControls();
         _playerInput.Enable();
+    }
+
+    private void OnDisable()
+    {
+        _playerInput.Disable();
     }
 
     private void Update()

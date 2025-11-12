@@ -1138,6 +1138,7 @@ MonoBehaviour:
   _reloadTime: 0
   _destroyTime: 10
   _fireRate: 12
+  _explosionPrefab: {fileID: 1567341239667122, guid: a787b4a495bb64d96830e95e2c353bdd, type: 3}
   _turret: {fileID: 1319434493914340}
   _rotationSpeed: 3
   _enemies: []

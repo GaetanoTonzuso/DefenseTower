@@ -20,11 +20,12 @@ namespace GameDevHQ.FileBase.Gatling_Gun
     /// </summary>
 
     [RequireComponent(typeof(AudioSource))] //Require Audio Source component
-    public class Gatling_Gun : MonoBehaviour , IDamageable , IAttack
+    public class Gatling_Gun : MonoBehaviour , IDamageable , IAttack , IWeapon
     {
         [SerializeField] private GameObject _firePoint; //Reference to hold Shooting Point
         [SerializeField] private float _fireDistance = 30f;
         [SerializeField] private float _fireRate = 0.5f;
+        [SerializeField] private GameObject _explosionPrefab;
         private float _nextFire = 0;
 
         private Transform _gunBarrel; //Reference to hold the gun barrel
@@ -190,6 +191,10 @@ namespace GameDevHQ.FileBase.Gatling_Gun
             if(Health < 1)
             {
                 Debug.Log("Destroy this turret");
+                Instantiate(_explosionPrefab,transform.position, Quaternion.identity);
+                //Send Message to PlaceZone and make it placeable
+                EventService.Instance.OnWeaponDestroyed.InvokeEvent();
+                Destroy(this.gameObject, 0.3f);
             }
         }
 

@@ -6,7 +6,7 @@ using GameDevHQ.FileBase.Missile_Launcher.Missile;
 
 namespace GameDevHQ.FileBase.Missile_Launcher
 {
-    public class Missile_Launcher : MonoBehaviour,IDamageable
+    public class Missile_Launcher : MonoBehaviour,IDamageable , IWeapon
     {
         public enum MissileType
         {
@@ -36,6 +36,8 @@ namespace GameDevHQ.FileBase.Missile_Launcher
         private bool _launched; //bool to check if we launched the rockets
         [SerializeField]
         private Transform _target; //Who should the rocket fire at?
+
+        [SerializeField] private GameObject _explosionPrefab;
 
         //Targets and Rotation settings
         [SerializeField] private GameObject _turret;
@@ -144,7 +146,8 @@ namespace GameDevHQ.FileBase.Missile_Launcher
             Debug.Log("Current Health: " + Health);
             if (Health < 1)
             {
-                Debug.Log("Destroy this turret");
+                Instantiate(_explosionPrefab,transform.position,Quaternion.identity);
+                Destroy(this.gameObject, 0.3f);
             }
         }
 

@@ -17,16 +17,21 @@ public class PlaceZone : MonoBehaviour, IInteractable
     private bool _isInteracting;
     private bool _canPlace = true;
 
+    private Coroutine _checkWeaponDestroyed;
+    private WaitForSeconds _weaponCheckWaitSeconds = new WaitForSeconds(1);
+
     private void OnEnable()
     {
         EventService.Instance.OnItemSelected.AddListener(OnItemSelected);
         EventService.Instance.OnItemSpawned.AddListener(OnItemSpawned);
+        EventService.Instance.OnWeaponDestroyed.AddListener(OnWeaponDestroyed);
     }
 
     private void OnDisable()
     {
         EventService.Instance.OnItemSelected.RemoveListener(OnItemSelected);
         EventService.Instance.OnItemSpawned.RemoveListener(OnItemSpawned);
+        EventService.Instance.OnWeaponDestroyed.RemoveListener(OnWeaponDestroyed);
     }
 
     private void Start()
@@ -67,9 +72,8 @@ public class PlaceZone : MonoBehaviour, IInteractable
                 
                 //Instantiate weapon selected
                 _itemClone = Instantiate(_itemPreviewPrefab,transform.position, Quaternion.identity);
-                
-               
-
+                _itemClone.transform.SetParent(this.transform);
+                              
                 //Send signal to WeaponSelection that the place is previewing the Tower/Weapon
                 EventService.Instance.OnItemPreview.InvokeEvent();
             }
@@ -144,5 +148,26 @@ public class PlaceZone : MonoBehaviour, IInteractable
         _itemPreviewPrefab = null;
         _itemClone = null;
         EventService.Instance.OnItemSpawned.InvokeEvent();
+    }
+
+    private void OnWeaponDestroyed()
+    {
+        if (_checkWeaponDestroyed == null)
+            _checkWeaponDestroyed = StartCoroutine(WeaponDestroyedRoutine());
+    }
+
+    //Check if weapon has been destroyed
+    private IEnumerator WeaponDestroyedRoutine()
+    {
+        yield return _weaponCheckWaitSeconds;
+        foreach (IWeapon weapon in transform.GetComponentsInChildren<IWeapon>())
+        {
+            if (weapon != null) yield return null;
+        }
+
+        _canPlace = true;
+        _greenHoverEffect.Stop();
+        _redPlaceEffect.Play();
+        _checkWeaponDestroyed = null;
     }
 }

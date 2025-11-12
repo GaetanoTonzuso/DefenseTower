@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -67,5 +68,32 @@ public class UIManager : MonoBehaviour
     public void UpdateLives(int lives)
     {
         _livesText.text = lives.ToString();
+    }
+
+    public void GameSpeed(int value)
+    {
+        switch(value)
+        {
+            case 0:
+                Time.timeScale = 0;
+                break;
+
+            case 1:
+                Time.timeScale = 1;
+                break;
+
+            case 2:
+                Time.timeScale = 2;
+                break;
+
+            default:
+                Time.timeScale = 1;
+                break;
+        }
+    }   
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(0);
     }
 }

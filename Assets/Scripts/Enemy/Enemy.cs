@@ -43,6 +43,7 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
         Health = _health;
         _isDead = false;
         _hasDetectedTower = false;
+        _target = null;
         _attackRoutine = null;
         _skinnedMesh = GetComponentInChildren<SkinnedMeshRenderer>();
         _mat = _skinnedMesh.material;
