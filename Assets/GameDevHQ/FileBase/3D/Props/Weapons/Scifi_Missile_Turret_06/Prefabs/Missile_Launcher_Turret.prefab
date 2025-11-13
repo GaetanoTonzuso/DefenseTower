@@ -916,12 +916,13 @@ MonoBehaviour:
   _destroyTime: 10
   _target: {fileID: 0}
   _explosionPrefab: {fileID: 1567341239667122, guid: a787b4a495bb64d96830e95e2c353bdd, type: 3}
+  upgradePanel: {fileID: 0}
   _turret: {fileID: 1530330881940990}
   _rotationSpeed: 3
   _enemies: []
   _currentTarget: {fileID: 0}
   _fireRate: 15
-  _health: 100
+  _health: 120
 --- !u!54 &6771075491736369708
 Rigidbody:
   m_ObjectHideFlags: 0

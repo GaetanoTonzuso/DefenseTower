@@ -5181,6 +5181,7 @@ MonoBehaviour:
   _fireDistance: 30
   _fireRate: 0.2
   _explosionPrefab: {fileID: 1567341239667122, guid: a787b4a495bb64d96830e95e2c353bdd, type: 3}
+  upgradePanel: {fileID: 0}
   Muzzle_Flash: {fileID: 1905276477678454}
   bulletCasings: {fileID: 198239830521320308}
   fireSound: {fileID: 8300000, guid: 08e0cb88300e54b09aa0deb684c3a3de, type: 3}
@@ -5188,8 +5189,8 @@ MonoBehaviour:
   _rotationSpeed: 4.5
   _enemies: []
   _currentTarget: {fileID: 0}
-  _health: 80
-  _atkDamage: 2
+  _health: 120
+  _atkDamage: 3
 --- !u!82 &82825197453988258
 AudioSource:
   m_ObjectHideFlags: 0

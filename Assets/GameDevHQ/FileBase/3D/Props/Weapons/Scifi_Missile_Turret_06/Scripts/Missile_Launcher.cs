@@ -38,6 +38,7 @@ namespace GameDevHQ.FileBase.Missile_Launcher
         private Transform _target; //Who should the rocket fire at?
 
         [SerializeField] private GameObject _explosionPrefab;
+        public GameObject upgradePanel;
 
         //Targets and Rotation settings
         [SerializeField] private GameObject _turret;
@@ -48,6 +49,7 @@ namespace GameDevHQ.FileBase.Missile_Launcher
         Vector3 directionTarget;
         Quaternion targetDirection;
         private bool _hasTarget;
+        private bool _isPlaced;
 
         [SerializeField] private float _fireRate = 0.5f;
         private float _nextFire = 0;
@@ -59,16 +61,20 @@ namespace GameDevHQ.FileBase.Missile_Launcher
         private void OnEnable()
         {
             EventService.Instance.OnEnemyDie.AddListener(OnEnemyDie);
+            EventService.Instance.OnActionPerformed.AddListener(ActiveUpgradePanel);
         }
 
         private void OnDisable()
         {
             EventService.Instance.OnEnemyDie.RemoveListener(OnEnemyDie);
+            EventService.Instance.OnActionPerformed.RemoveListener(ActiveUpgradePanel);
         }
 
         private void Start()
         {
-            Health = _health;   
+            Health = _health;
+            upgradePanel = GameObject.Find("Canvas-UI").transform.Find("Upgrade_Missile").gameObject;
+            StartCoroutine(Place());
         }
 
         private void Update()
@@ -143,10 +149,10 @@ namespace GameDevHQ.FileBase.Missile_Launcher
         public void Damage(float damage)
         {
             Health -= damage;
-            Debug.Log("Current Health: " + Health);
             if (Health < 1)
             {
                 Instantiate(_explosionPrefab,transform.position,Quaternion.identity);
+                EventService.Instance.OnWeaponDestroyed.InvokeEvent();
                 Destroy(this.gameObject, 0.3f);
             }
         }
@@ -206,6 +212,21 @@ namespace GameDevHQ.FileBase.Missile_Launcher
             {
                 _hasTarget = false;
                 _currentTarget = null;
+            }
+        }
+
+        private IEnumerator Place()
+        {
+            yield return new WaitForSeconds(2);
+            _isPlaced = true;
+        }
+
+        private void ActiveUpgradePanel()
+        {
+            if (_isPlaced)
+            {
+                upgradePanel.SetActive(true);
+                EventService.Instance.OnUpdateWeapon.InvokeEvent(this.transform, this.gameObject);
             }
         }
     }

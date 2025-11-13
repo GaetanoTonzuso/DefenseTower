@@ -27,6 +27,7 @@ public class EventService
     public EventController OnItemNotPreview { get; private set; }
     public EventController OnItemSpawned { get; private set; }
     public EventController OnWeaponDestroyed { get; private set; }
+    public EventController<Transform,GameObject> OnUpdateWeapon { get; private set; }
 
     //Enemy
     public EventController<Enemy> OnEnemyDie { get; private set; }
@@ -49,5 +50,6 @@ public class EventService
         OnPlayerHit = new EventController();
         OnWaveEnd = new EventController();
         OnWeaponDestroyed = new EventController();
+        OnUpdateWeapon = new EventController<Transform,GameObject>();
     }
 }

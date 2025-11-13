@@ -38,7 +38,6 @@ public class PlayerRaycast : MonoBehaviour
         if (Physics.Raycast(_ray, out _hitInfo, Mathf.Infinity))
         {
             IInteractable interactable = _hitInfo.transform.GetComponent<IInteractable>();
-
             // Se stai ancora puntando lo stesso oggetto, non fare nulla
             if (interactable == _lastInteractable)
                 return;

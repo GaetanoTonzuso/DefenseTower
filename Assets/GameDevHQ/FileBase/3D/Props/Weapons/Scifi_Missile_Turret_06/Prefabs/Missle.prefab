@@ -176,7 +176,7 @@ MonoBehaviour:
   _launchSpeed: 0
   _power: 0
   _fuseDelay: 0
-  _atk: 15
+  _atk: 20
 --- !u!136 &622995038246941556
 CapsuleCollider:
   m_ObjectHideFlags: 0

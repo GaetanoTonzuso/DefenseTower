@@ -29991,8 +29991,8 @@ MonoBehaviour:
   _enemies: []
   _currentTarget: {fileID: 0}
   _fireRate: 0.2
-  _health: 100
-  _atkDamage: 4
+  _health: 150
+  _atkDamage: 5
 --- !u!82 &82127826341503972
 AudioSource:
   m_ObjectHideFlags: 0
@@ -30280,7 +30280,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4636760796865511784}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

@@ -6,13 +6,12 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(Dissolve))]
-public class Enemy : MonoBehaviour , IDamageable , IAttack
+public class Enemy : MonoBehaviour, IDamageable, IAttack
 {
     public float Health { get; set; }
     [SerializeField] private float _health = 100;
-    public int AtkDamage {  get; set; }
+    public int AtkDamage { get; set; }
     private float _speed = 1.5f;
-    
 
     private int _currentTargetId;
     private int _warfundsCredits = 150;
@@ -32,7 +31,7 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
 
     private SkinnedMeshRenderer _skinnedMesh;
     private Material _mat;
-        
+
     private void OnEnable()
     {
         EnableObject();
@@ -45,9 +44,11 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
         _hasDetectedTower = false;
         _target = null;
         _attackRoutine = null;
+
         _skinnedMesh = GetComponentInChildren<SkinnedMeshRenderer>();
         _mat = _skinnedMesh.material;
         _mat.SetFloat("_DissolveAmount", 0f);
+
         GetComponent<CapsuleCollider>().enabled = true;
 
         if (_anim != null)
@@ -62,14 +63,16 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
         {
             _agent.enabled = true;
 
-            if (NavMesh.SamplePosition((_targets[0].transform.position), out NavMeshHit hit, 2f, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(_targets[0].transform.position, out NavMeshHit hit, 2f, NavMesh.AllAreas))
             {
                 _agent.Warp(hit.position);
                 _agent.speed = _speed;
                 _agent.isStopped = false;
-                _agent.SetDestination(_targets[_currentTargetId].transform.position);
+
+                if (CanMove())
+                    _agent.SetDestination(_targets[_currentTargetId].transform.position);
             }
-        }      
+        }
     }
 
     private void Start()
@@ -84,40 +87,41 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
 
         _anim = GetComponent<Animator>();
         if (_anim == null)
-        {
             Debug.LogError("Anim is NULL on: " + gameObject.name);
-        }
 
         _agent = GetComponent<NavMeshAgent>();
         if (_agent == null)
-        {
             Debug.Log("Agent is NULL on " + gameObject.name);
-        }
-        
-        if(_agent != null)
+
+        if (_agent != null)
         {
             _agent.speed = _speed;
 
-            _agent.SetDestination(_targets[_currentTargetId].transform.position);
+            if (CanMove())
+                _agent.SetDestination(_targets[_currentTargetId].transform.position);
         }
 
         _dissolve = GetComponent<Dissolve>();
-        if(_dissolve == null)
-        {
+        if (_dissolve == null)
             Debug.LogError("Dissolve is NULL");
-        }
     }
 
+    // 🔥 CONTROLLO CENTRALE
+    private bool CanMove()
+    {
+        return _agent != null && _agent.enabled && _agent.isOnNavMesh;
+    }
 
     protected void Update()
     {
+        if (!CanMove()) return;
+
         if (_hasDetectedTower && _target == null)
         {
             StopAttack();
             _hasDetectedTower = false;
 
-            // Riprende il movimento verso il percorso
-            if (_agent != null && _currentTargetId < _targets.Length)
+            if (_currentTargetId < _targets.Length && CanMove())
             {
                 _agent.isStopped = false;
                 _agent.stoppingDistance = 0f;
@@ -137,20 +141,23 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
 
     private void MoveAI()
     {
-        if (_hasDetectedTower || _agent == null || _target != null && _hasDetectedTower) return;
+        if (_hasDetectedTower || _agent == null || (_target != null && _hasDetectedTower)) return;
+        if (!CanMove()) return;
 
-        if (_agent.remainingDistance < 0.5f && _agent != null)
+        if (_agent.remainingDistance < 0.5f)
+        {
+            _currentTargetId++;
+
+            if (_currentTargetId < _targets.Length)
             {
-                _currentTargetId++;
-                if (_currentTargetId < _targets.Length)
-                {
+                if (CanMove())
                     _agent.SetDestination(_targets[_currentTargetId].transform.position);
-                }
-                else
-                {
-                    _agent.isStopped = true;
-                }
             }
+            else
+            {
+                _agent.isStopped = true;
+            }
+        }
     }
 
     public void Attack()
@@ -175,10 +182,8 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
         if (Health >= 1 && !_isDead)
         {
             Health -= damage;
-
         }
-
-        else if(Health < 1 && !_isDead)
+        else if (Health < 1 && !_isDead)
         {
             Death();
         }
@@ -188,45 +193,56 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
     {
         _isDead = true;
         _anim.SetTrigger("Death");
+
         GetComponent<CapsuleCollider>().enabled = false;
-        _agent.isStopped = true;
-        _agent.enabled = false;
+
+        if (_agent != null)
+        {
+            _agent.isStopped = true;
+            _agent.enabled = false;
+        }
+
         EventService.Instance.OnEnemyDie.InvokeEvent(this);
         StopAttack();
         _dissolve.StartDissolveRoutine();
-        //Dissolve will disable at end of routine
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Turret") && !_hasDetectedTower)
+        if (other.CompareTag("Turret") && !_hasDetectedTower && CanMove())
         {
             _agent.stoppingDistance = 1.5f;
             _hasDetectedTower = true;
             _target = other.transform.parent;
-            _agent.SetDestination(_target.position);
+
+            if (CanMove())
+                _agent.SetDestination(_target.position);
+
             Attack();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.CompareTag("Turret"))
+        if (other.CompareTag("Turret"))
         {
             _agent.stoppingDistance = 0f;
             _hasDetectedTower = false;
-            _agent.SetDestination(_targets[_currentTargetId].transform.position);
+
+            if (CanMove())
+                _agent.SetDestination(_targets[_currentTargetId].transform.position);
         }
     }
 
     IEnumerator AttackRoutine()
-    {       
-        while(Vector3.Distance(transform.position,_target.position) > _agent.stoppingDistance)
-        {         
+    {
+        while (Vector3.Distance(transform.position, _target.position) > _agent.stoppingDistance)
+        {
             yield return null;
         }
 
-       _agent.isStopped = true;
+        if (CanMove())
+            _agent.isStopped = true;
 
         while (Vector3.Distance(transform.position, _target.position) <= _agent.stoppingDistance)
         {
@@ -237,5 +253,4 @@ public class Enemy : MonoBehaviour , IDamageable , IAttack
         _attackRoutine = null;
         yield return null;
     }
-
 }

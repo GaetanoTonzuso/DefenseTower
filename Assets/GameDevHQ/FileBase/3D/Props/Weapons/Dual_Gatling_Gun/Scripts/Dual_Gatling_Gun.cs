@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace GameDevHQ.FileBase.Dual_Gatling_Gun
-{
+//namespace GameDevHQ.FileBase.Dual_Gatling_Gun
+
     [RequireComponent(typeof(AudioSource))] //Require Audio Source component
     public class Dual_Gatling_Gun : MonoBehaviour, IAttack, IDamageable
     {
@@ -233,5 +233,3 @@ namespace GameDevHQ.FileBase.Dual_Gatling_Gun
             }
         }
     }
-
-}

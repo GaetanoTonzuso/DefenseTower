@@ -26,6 +26,8 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         [SerializeField] private float _fireDistance = 30f;
         [SerializeField] private float _fireRate = 0.5f;
         [SerializeField] private GameObject _explosionPrefab;
+
+        public GameObject upgradePanel;
         private float _nextFire = 0;
 
         private Transform _gunBarrel; //Reference to hold the gun barrel
@@ -46,6 +48,7 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         Quaternion targetDirection;
         private bool _hasTarget;
         private bool _isShooting;
+        private bool _isPlaced = false;
         RaycastHit hit;
 
         //Turret Health
@@ -58,11 +61,13 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         private void OnEnable()
         {
             EventService.Instance.OnEnemyDie.AddListener(OnEnemyDie);
+            EventService.Instance.OnActionPerformed.AddListener(ActiveUpgradePanel);
         }
 
         private void OnDisable()
         {
             EventService.Instance.OnEnemyDie.RemoveListener(OnEnemyDie);
+            EventService.Instance.OnActionPerformed.RemoveListener(ActiveUpgradePanel);
         }
 
         // Use this for initialization
@@ -71,11 +76,13 @@ namespace GameDevHQ.FileBase.Gatling_Gun
             Health = _health;
             AtkDamage = _atkDamage;
             _gunBarrel = GameObject.Find("Barrel_to_Spin").GetComponent<Transform>(); //assigning the transform of the gun barrel to the variable
+            upgradePanel = GameObject.Find("Canvas-UI").transform.Find("Upgrade_Gun").gameObject;
             Muzzle_Flash.SetActive(false); //setting the initial state of the muzzle flash effect to off
             _audioSource = GetComponent<AudioSource>(); //ssign the Audio Source to the reference variable
             _audioSource.playOnAwake = false; //disabling play on awake
             _audioSource.loop = true; //making sure our sound effect loops
             _audioSource.clip = fireSound; //assign the clip to play
+            StartCoroutine(Place());
         }
 
         // Update is called once per frame
@@ -187,10 +194,8 @@ namespace GameDevHQ.FileBase.Gatling_Gun
         public void Damage(float damage)
         {
             Health -= damage;
-            Debug.Log("Current Health: " + Health);
             if(Health < 1)
             {
-                Debug.Log("Destroy this turret");
                 Instantiate(_explosionPrefab,transform.position, Quaternion.identity);
                 //Send Message to PlaceZone and make it placeable
                 EventService.Instance.OnWeaponDestroyed.InvokeEvent();
@@ -231,6 +236,21 @@ namespace GameDevHQ.FileBase.Gatling_Gun
             {
                 _hasTarget = false;
                 _currentTarget = null;
+            }
+        }
+
+        private IEnumerator Place()
+        {
+            yield return new WaitForSeconds(2);
+            _isPlaced = true;
+        }
+        
+        private void ActiveUpgradePanel()
+        {
+            if(_isPlaced)
+            {
+                upgradePanel.SetActive(true);
+                EventService.Instance.OnUpdateWeapon.InvokeEvent(this.transform, this.gameObject);
             }
         }
     }

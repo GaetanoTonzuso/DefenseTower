@@ -4948,7 +4948,7 @@ MonoBehaviour:
   _launchSpeed: 0
   _power: 0
   _fuseDelay: 0
-  _atkDamage: 25
+  _atkDamage: 30
 --- !u!82 &82182745348585272
 AudioSource:
   m_ObjectHideFlags: 0
