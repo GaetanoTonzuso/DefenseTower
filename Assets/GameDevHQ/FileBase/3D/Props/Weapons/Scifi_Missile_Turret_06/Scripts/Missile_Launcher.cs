@@ -223,10 +223,18 @@ namespace GameDevHQ.FileBase.Missile_Launcher
 
         private void ActiveUpgradePanel()
         {
-            if (_isPlaced)
+            Vector3 mousePos = PlayerController.Instance.playerInput.Player.Mouse.ReadValue<Vector2>();
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(mousePos);
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << 7))
             {
-                upgradePanel.SetActive(true);
-                EventService.Instance.OnUpdateWeapon.InvokeEvent(this.transform, this.gameObject);
+                IWeapon weapon = hit.collider.GetComponent<IWeapon>();
+                if (weapon != null && _isPlaced)
+                {
+                    upgradePanel.SetActive(true);
+                    EventService.Instance.OnUpdateWeapon.InvokeEvent(this.transform, this.gameObject);
+                }
             }
         }
     }

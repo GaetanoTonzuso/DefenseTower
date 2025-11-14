@@ -5140,7 +5140,8 @@ GameObject:
   - component: {fileID: 114600360289361042}
   - component: {fileID: 82825197453988258}
   - component: {fileID: 6732564896168112282}
-  m_Layer: 0
+  - component: {fileID: 7978151282468860299}
+  m_Layer: 7
   m_Name: Gatling_Gun
   m_TagString: Turret
   m_Icon: {fileID: 0}
@@ -5190,7 +5191,7 @@ MonoBehaviour:
   _enemies: []
   _currentTarget: {fileID: 0}
   _health: 120
-  _atkDamage: 3
+  _atkDamage: 4
 --- !u!82 &82825197453988258
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5314,6 +5315,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!135 &7978151282468860299
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425032208015248}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Radius: 1.0137737
+  m_Center: {x: 0, y: 0.5137737, z: 0}
 --- !u!1 &1481110104042698
 GameObject:
   m_ObjectHideFlags: 0
@@ -15343,7 +15365,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 20.2, y: 0.06385171, z: 20.2}
+  m_LocalScale: {x: 22.21, y: 0.07020526, z: 22.21}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4633165491543876}

@@ -44,6 +44,7 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
         _hasDetectedTower = false;
         _target = null;
         _attackRoutine = null;
+        _currentTargetId = 0;
 
         _skinnedMesh = GetComponentInChildren<SkinnedMeshRenderer>();
         _mat = _skinnedMesh.material;
@@ -65,6 +66,7 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
 
             if (NavMesh.SamplePosition(_targets[0].transform.position, out NavMeshHit hit, 2f, NavMesh.AllAreas))
             {
+                _agent.stoppingDistance = 0.5f;
                 _agent.Warp(hit.position);
                 _agent.speed = _speed;
                 _agent.isStopped = false;
@@ -106,7 +108,6 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
             Debug.LogError("Dissolve is NULL");
     }
 
-    // 🔥 CONTROLLO CENTRALE
     private bool CanMove()
     {
         return _agent != null && _agent.enabled && _agent.isOnNavMesh;
@@ -116,15 +117,16 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
     {
         if (!CanMove()) return;
 
-        if (_hasDetectedTower && _target == null)
+        if (_hasDetectedTower && (_target == null || _target.gameObject == null))
         {
             StopAttack();
             _hasDetectedTower = false;
 
             if (_currentTargetId < _targets.Length && CanMove())
             {
+                _target = null;
                 _agent.isStopped = false;
-                _agent.stoppingDistance = 0f;
+                _agent.stoppingDistance = 0.5f;
                 _agent.SetDestination(_targets[_currentTargetId].transform.position);
             }
 
@@ -135,7 +137,7 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
         {
             transform.LookAt(_target);
         }
-
+   
         MoveAI();
     }
 
@@ -144,18 +146,20 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
         if (_hasDetectedTower || _agent == null || (_target != null && _hasDetectedTower)) return;
         if (!CanMove()) return;
 
-        if (_agent.remainingDistance < 0.5f)
+        if (!_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance)
         {
-            _currentTargetId++;
+            if (_agent.velocity.sqrMagnitude < 0.1f)
+            {
+                _currentTargetId++;
 
-            if (_currentTargetId < _targets.Length)
-            {
-                if (CanMove())
+                if (_currentTargetId < _targets.Length)
+                {
                     _agent.SetDestination(_targets[_currentTargetId].transform.position);
-            }
-            else
-            {
-                _agent.isStopped = true;
+                }
+                else
+                {
+                    _agent.isStopped = true;
+                }
             }
         }
     }
@@ -213,10 +217,12 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
         {
             _agent.stoppingDistance = 1.5f;
             _hasDetectedTower = true;
-            _target = other.transform.parent;
+            _target = other.transform;
 
             if (CanMove())
-                _agent.SetDestination(_target.position);
+            {
+               _agent.SetDestination(_target.position);
+            }
 
             Attack();
         }
@@ -226,31 +232,39 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
     {
         if (other.CompareTag("Turret"))
         {
-            _agent.stoppingDistance = 0f;
+            _agent.stoppingDistance = 0.5f;
             _hasDetectedTower = false;
 
-            if (CanMove())
+            if (CanMove() && _currentTargetId < _targets.Length)
+            {
                 _agent.SetDestination(_targets[_currentTargetId].transform.position);
+            }
         }
     }
 
     IEnumerator AttackRoutine()
     {
-        while (Vector3.Distance(transform.position, _target.position) > _agent.stoppingDistance)
+        while (_hasDetectedTower && _target != null)
         {
-            yield return null;
-        }
+            float dist = Vector3.Distance(transform.position, _target.position);
 
-        if (CanMove())
+            if (dist > _agent.stoppingDistance)
+            {
+                if (!_agent.isStopped)
+                    _agent.SetDestination(_target.position);
+
+                yield return null;
+                continue;
+            }
+
             _agent.isStopped = true;
 
-        while (Vector3.Distance(transform.position, _target.position) <= _agent.stoppingDistance)
-        {
             _anim.SetTrigger("Attack");
             yield return _attackRoutineSeconds;
         }
 
+        _agent.isStopped = false;
         _attackRoutine = null;
-        yield return null;
+
     }
 }
