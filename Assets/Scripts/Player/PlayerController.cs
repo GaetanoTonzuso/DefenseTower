@@ -28,6 +28,12 @@ public class PlayerController : MonoBehaviour
     {
         playerInput.Player.Action.started += Action_performed;
         playerInput.Player.Cancel.started += Action_Cancel;
+        playerInput.Player.Quit.started += Quit_started;
+    }
+
+    private void Quit_started(InputAction.CallbackContext obj)
+    {
+        Application.Quit();
     }
 
     private void OnDisable()

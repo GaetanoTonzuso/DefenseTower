@@ -19,6 +19,8 @@ using UnityEngine;
         private ParticleSystem[] _bulletCasings; //reference to the bullet casing effect to play when firing
         [SerializeField]
         private AudioClip _fireSound; //Reference to the audio clip
+        [SerializeField]
+        private GameObject _explosionPrefab;
 
         private AudioSource _audioSource; //reference to the audio source component
         private bool _startWeaponNoise = true;
@@ -33,8 +35,9 @@ using UnityEngine;
         Quaternion targetDirection;
         private bool _hasTarget;
         private bool _isShooting;
+        RaycastHit hit;
 
-        [SerializeField] private float _fireRate = 0.5f;
+    [SerializeField] private float _fireRate = 0.5f;
         private float _nextFire = 0;
 
         //Turret Health
@@ -187,12 +190,14 @@ using UnityEngine;
         public void Damage(float damage)
         {
             Health -= damage;
-            Debug.Log("Current Health: " + Health);
             if (Health < 1)
             {
-                Debug.Log("Destroy this turret");
+                Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+                //Send Message to PlaceZone and make it placeable
+                EventService.Instance.OnWeaponDestroyed.InvokeEvent();
+                Destroy(this.gameObject, 0.3f);
             }
-        }
+    }
 
         public void Attack()
         {
@@ -201,10 +206,8 @@ using UnityEngine;
 
         private void FireRay()
         {
-            Debug.Log("Start Ray");
-            RaycastHit hit;
-            Debug.DrawRay(_firePoint.transform.position, _firePoint.transform.forward * _fireDistance, Color.red, 5f);
-            if (Physics.Raycast(_firePoint.transform.position, _firePoint.transform.forward, out hit, _fireDistance))
+            
+            if (Physics.Raycast(_firePoint.transform.position, _firePoint.transform.forward, out hit, _fireDistance, 1 << 6))
             {
                 if (hit.collider != null)
                 {

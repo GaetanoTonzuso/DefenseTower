@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
     public int currentWarfunds { get {  return _warfunds; } }
 
     private int _currentEnemiesAlive;
+    private Coroutine _updateEnemiesRoutine;
+    private WaitForSeconds _waitEnemiesUpdateSeconds = new WaitForSeconds(0.5f);
 
     private void OnEnable()
     {
@@ -68,12 +70,9 @@ public class GameManager : MonoBehaviour
 
     public void UpdateEnemiesAlive() //Check if there are other enemies in the current wave
     {
-        _currentEnemiesAlive--;
-        Debug.Log("Current enemies: " + _currentEnemiesAlive);
-        if(_currentEnemiesAlive < 1)
+        if(_updateEnemiesRoutine == null)
         {
-            Debug.Log("Enemies killed");
-            EventService.Instance.OnWaveEnd.InvokeEvent();
+            _updateEnemiesRoutine = StartCoroutine(UpdateEnemiesRoutine());
         }
     }
 
@@ -91,5 +90,18 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(0);
         }
+    }
+
+    private IEnumerator UpdateEnemiesRoutine()
+    {
+        _currentEnemiesAlive--;
+        yield return _waitEnemiesUpdateSeconds;
+
+        if (_currentEnemiesAlive < 1)
+        {
+            EventService.Instance.OnWaveEnd.InvokeEvent();
+        }
+
+        _updateEnemiesRoutine = null;
     }
 }

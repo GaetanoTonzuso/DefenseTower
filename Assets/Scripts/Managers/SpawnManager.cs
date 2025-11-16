@@ -22,6 +22,7 @@ public class SpawnManager : MonoBehaviour
     private int _enemiesSpawned = 0;
     private int _currentWave = 0;
     private int _nextWave;
+    [SerializeField] private GameObject _winPanel;
 
     private void OnEnable()
     {
@@ -46,7 +47,6 @@ public class SpawnManager : MonoBehaviour
         _enemiesSpawned = 0;
         _currentWave++;
         _enemiesToSpawn *= _currentWave;
-        Debug.Log($"Starting Wave Routine - Current Wave: {_currentWave} , EnemiesToSpawn: {_enemiesToSpawn} " );
 
         yield return new WaitForSeconds(1f);
         while(_enemiesSpawned < _enemiesToSpawn)
@@ -78,6 +78,7 @@ public class SpawnManager : MonoBehaviour
             else
             {
                 Debug.Log("You Win");
+                _winPanel.SetActive(true);
             }
         }
     }

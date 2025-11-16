@@ -193,7 +193,6 @@ namespace GameDevHQ.FileBase.Gatling_Gun
 
         public void Damage(float damage)
         {
-            Debug.Log("Took damage: " + damage);
             Health -= damage;
             if(Health < 1)
             {

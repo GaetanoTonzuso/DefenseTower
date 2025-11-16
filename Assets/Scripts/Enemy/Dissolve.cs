@@ -42,7 +42,7 @@ public class Dissolve : MonoBehaviour
         _dissolveRoutine = null;
         yield return _disableWaitSeconds;
         GameManager.instance.UpdateEnemiesAlive();
-        yield return null;
+        yield return new WaitForSeconds(0.5f);
         transform.gameObject.SetActive(false);
     }
 }

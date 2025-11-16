@@ -10004,6 +10004,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4743084131799960}
+  - {fileID: 278360339231009801}
   m_Father: {fileID: 4587695287794678}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1432479066348178
@@ -29873,7 +29874,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4159911809947316}
-  - {fileID: 1689532221008409405}
   m_Father: {fileID: 4394015268124526}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &33778157713530454
@@ -29974,7 +29974,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa87186eb31905c4fa207e5970b35579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firePoint: {fileID: 7293390163856400474}
+  _firePoint: {fileID: 1514977078818765063}
   _fireDistance: 50
   _gunBarrel:
   - {fileID: 4739561172089730}
@@ -29986,7 +29986,8 @@ MonoBehaviour:
   - {fileID: 198195836669371088}
   - {fileID: 198825845797523540}
   _fireSound: {fileID: 8300000, guid: ebcd7ceac90454c1e9dc458cb87b6f75, type: 3}
-  _turret: {fileID: 1871798344888486}
+  _explosionPrefab: {fileID: 1567341239667122, guid: a787b4a495bb64d96830e95e2c353bdd, type: 3}
+  _turret: {fileID: 1427593964865674}
   _rotationSpeed: 3
   _enemies: []
   _currentTarget: {fileID: 0}
@@ -30231,6 +30232,37 @@ Transform:
   - {fileID: 4593032360865450}
   m_Father: {fileID: 4802098303277968}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1514977078818765063
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 278360339231009801}
+  m_Layer: 0
+  m_Name: Fire
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &278360339231009801
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1514977078818765063}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.28, z: 2.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4159911809947316}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4636760796865511784
 GameObject:
   m_ObjectHideFlags: 0
@@ -30336,34 +30368,3 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.8
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &7293390163856400474
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1689532221008409405}
-  m_Layer: 0
-  m_Name: FirePoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1689532221008409405
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7293390163856400474}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 2.61}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4587695287794678}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -125,6 +125,7 @@ public class PlaceZone : MonoBehaviour, IInteractable
         //Enable all sphere colliders for our Weapons
         foreach (Collider col in _itemClone.GetComponentsInChildren<Collider>())
         {
+            if(col != null)
             col.enabled = true;
         }
         GameManager.instance.RemoveWarfunds(_currentItemCost);

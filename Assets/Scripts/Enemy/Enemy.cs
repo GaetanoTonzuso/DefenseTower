@@ -27,6 +27,7 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
     private Dissolve _dissolve;
 
     [SerializeField] private int _atkDamage = 20;
+    [SerializeField] private float _attackDistance = 1.25f;
     [SerializeField] private GameObject[] _targets;
 
     private SkinnedMeshRenderer _skinnedMesh;
@@ -95,6 +96,8 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
         if (_agent == null)
             Debug.Log("Agent is NULL on " + gameObject.name);
 
+        _agent.stoppingDistance = 1f;
+
         if (_agent != null)
         {
             _agent.speed = _speed;
@@ -126,7 +129,7 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
             {
                 _target = null;
                 _agent.isStopped = false;
-                _agent.stoppingDistance = 0.5f;
+                _agent.stoppingDistance = 1f;
                 _agent.SetDestination(_targets[_currentTargetId].transform.position);
             }
 
@@ -215,7 +218,7 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
     {
         if (other.CompareTag("Turret") && !_hasDetectedTower && CanMove())
         {
-            _agent.stoppingDistance = 1.5f;
+            _agent.stoppingDistance = _attackDistance;
             _hasDetectedTower = true;
             _target = other.transform;
 
@@ -232,7 +235,7 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
     {
         if (other.CompareTag("Turret"))
         {
-            _agent.stoppingDistance = 0.5f;
+            _agent.stoppingDistance = 1f;
             _hasDetectedTower = false;
 
             if (CanMove() && _currentTargetId < _targets.Length)
