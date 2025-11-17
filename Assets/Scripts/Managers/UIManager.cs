@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Lives")]
     [SerializeField] private Text _livesText;
+    [SerializeField] private Text _status;
 
     [Header("Weapon prices Settings")]
     [SerializeField] private Text[] _pricesTexts;
@@ -38,6 +39,8 @@ public class UIManager : MonoBehaviour
 
     [Header("Wave UI")]
     [SerializeField] private Text _currentWaveText;
+
+
 
     private void Start()
     {
@@ -95,5 +98,10 @@ public class UIManager : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void UpdateStatus(string status)
+    {
+        _status.text = status;
     }
 }

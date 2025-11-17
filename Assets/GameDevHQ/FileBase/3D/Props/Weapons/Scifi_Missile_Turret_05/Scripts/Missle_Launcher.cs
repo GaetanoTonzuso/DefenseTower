@@ -136,7 +136,8 @@ namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret
             if (Health < 1)
             {
                 Instantiate(_explosionPrefab,transform.position,Quaternion.identity);
-                Destroy(this.gameObject, 0.3f);
+                EventService.Instance.OnWeaponDestroyed.InvokeEvent();
+                Destroy(this.gameObject);
             }
         }
 

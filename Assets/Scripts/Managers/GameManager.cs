@@ -100,6 +100,22 @@ public class GameManager : MonoBehaviour
     {
         UpdateEnemiesAlive();
         _lives--;
+
+        switch(_lives)
+        {
+            case 5:
+                UIManager.instance.UpdateStatus("Good");
+                break;
+
+            case 3:
+                UIManager.instance.UpdateStatus("Damaged");
+                break;
+
+            case 2:
+                UIManager.instance.UpdateStatus("Critical");
+                break;
+        }
+
         UIManager.instance.UpdateLives(_lives);
         if(_lives < 1)
         {

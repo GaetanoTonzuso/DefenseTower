@@ -6451,6 +6451,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _livesText: {fileID: 783571177}
+  _status: {fileID: 254106825}
   _pricesTexts:
   - {fileID: 1969830997}
   - {fileID: 1054502604}

@@ -195,7 +195,7 @@ using UnityEngine;
                 Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
                 //Send Message to PlaceZone and make it placeable
                 EventService.Instance.OnWeaponDestroyed.InvokeEvent();
-                Destroy(this.gameObject, 0.3f);
+                Destroy(this.gameObject);
             }
     }
 

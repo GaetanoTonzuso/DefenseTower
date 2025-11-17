@@ -160,15 +160,24 @@ public class PlaceZone : MonoBehaviour, IInteractable
     //Check if weapon has been destroyed
     private IEnumerator WeaponDestroyedRoutine()
     {
-        yield return _weaponCheckWaitSeconds;
-        foreach (IWeapon weapon in transform.GetComponentsInChildren<IWeapon>())
+        yield return null;
+
+        IWeapon[] weapons = transform.GetComponentsInChildren<IWeapon>();
+
+        if (weapons != null && weapons.Length > 0)
         {
-            if (weapon != null) yield return null;
+            _checkWeaponDestroyed = null;
+            yield break;
         }
 
         _canPlace = true;
-        _greenHoverEffect.Stop();
-        _redPlaceEffect.Play();
+
+        if (_greenHoverEffect != null)
+            _greenHoverEffect.Stop();
+
+        if (_redPlaceEffect != null)
+            _redPlaceEffect.Play();
+
         _checkWeaponDestroyed = null;
     }
 }

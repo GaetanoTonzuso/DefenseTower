@@ -1143,7 +1143,7 @@ MonoBehaviour:
   _rotationSpeed: 3
   _enemies: []
   _currentTarget: {fileID: 0}
-  _health: 110
+  _health: 130
 --- !u!54 &2359313068256738525
 Rigidbody:
   m_ObjectHideFlags: 0

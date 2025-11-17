@@ -153,7 +153,7 @@ namespace GameDevHQ.FileBase.Missile_Launcher
             {
                 Instantiate(_explosionPrefab,transform.position,Quaternion.identity);
                 EventService.Instance.OnWeaponDestroyed.InvokeEvent();
-                Destroy(this.gameObject, 0.3f);
+                Destroy(this.gameObject);
             }
         }
 

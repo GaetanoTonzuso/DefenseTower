@@ -14,11 +14,13 @@ public class UpgradeManager : MonoBehaviour
     private void OnEnable()
     {
         EventService.Instance.OnUpdateWeapon.AddListener(UpgradeGatling);
+        EventService.Instance.OnUpdateWeapon.AddListener(UpgradeMissile);
     }
 
     private void OnDisable()
     {
         EventService.Instance.OnUpdateWeapon.RemoveListener(UpgradeGatling);
+        EventService.Instance.OnUpdateWeapon.RemoveListener(UpgradeMissile);
     }
 
     [SerializeField] private GameObject _upgradeGatlingPrefab;
@@ -51,7 +53,8 @@ public class UpgradeManager : MonoBehaviour
         {
             GameManager.instance.RemoveWarfunds(_upgradeGatlingCost);
             _oldWeapon.GetComponent<Gatling_Gun>().upgradePanel.SetActive(false);
-            Instantiate(_upgradeGatlingPrefab, _spawnPos.position, Quaternion.identity);
+            GameObject weapon = Instantiate(_upgradeGatlingPrefab, _spawnPos.position, Quaternion.identity);
+            weapon.transform.SetParent(_oldWeapon.transform.parent);
             Destroy(_oldWeapon);
 
             _spawnPos = null;
@@ -71,7 +74,8 @@ public class UpgradeManager : MonoBehaviour
         {
             GameManager.instance.RemoveWarfunds(_upgradeMissileCost);
             _panelMissile.SetActive(false);
-            Instantiate(_upgradeMissilePrefab, _spawnPos.position, Quaternion.identity);
+            GameObject weapon = Instantiate(_upgradeMissilePrefab, _spawnPos.position, Quaternion.identity);
+            weapon.transform.SetParent(_oldWeapon.transform.parent);
             Destroy(_oldWeapon);
 
             _spawnPos = null;

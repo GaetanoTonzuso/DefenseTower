@@ -923,7 +923,7 @@ MonoBehaviour:
   _enemies: []
   _currentTarget: {fileID: 0}
   _fireRate: 15
-  _health: 120
+  _health: 110
 --- !u!54 &6771075491736369708
 Rigidbody:
   m_ObjectHideFlags: 0

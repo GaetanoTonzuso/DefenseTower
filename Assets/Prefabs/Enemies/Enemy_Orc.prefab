@@ -1968,9 +1968,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7457d4f295dd5e7429263414a3ab25c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 95
+  _health: 100
   _target: {fileID: 0}
   _atkDamage: 12
+  _attackDistance: 1.25
   _targets:
   - {fileID: 0}
   - {fileID: 0}
