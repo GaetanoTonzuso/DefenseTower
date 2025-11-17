@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     {
         playerInput.Player.Action.started -= Action_performed;
         playerInput.Player.Cancel.started -= Action_Cancel;
+        playerInput.Player.Quit.started -= Quit_started;
 
         playerInput.Disable();
     }

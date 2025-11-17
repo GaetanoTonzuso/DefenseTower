@@ -29,9 +29,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _warfunds = 500;
     public int currentWarfunds { get {  return _warfunds; } }
 
-    private int _currentEnemiesAlive;
     private Coroutine _updateEnemiesRoutine;
     private WaitForSeconds _waitEnemiesUpdateSeconds = new WaitForSeconds(0.5f);
+    private Enemy[] _enemies;
+    private int _enemiesCount;
 
     private void OnEnable()
     {
@@ -63,9 +64,10 @@ public class GameManager : MonoBehaviour
         UIManager.instance.UpdateWarfunds(_warfunds);
     }
 
-    public void InitializeEnemiesAlive(int currentEnemies)
+    public void InitializeEnemiesAlive()
     {
-        _currentEnemiesAlive = currentEnemies;
+        _enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.InstanceID);
+        _enemiesCount = _enemies.Length;
     }
 
     public void UpdateEnemiesAlive() //Check if there are other enemies in the current wave
@@ -81,6 +83,19 @@ public class GameManager : MonoBehaviour
         AddWarfunds(enemy.WarfundsCredits);
     }
 
+    private IEnumerator UpdateEnemiesRoutine()
+    {
+        InitializeEnemiesAlive();
+        yield return _waitEnemiesUpdateSeconds;
+
+        if (_enemiesCount < 1)
+        {
+            EventService.Instance.OnWaveEnd.InvokeEvent();
+        }
+
+        _updateEnemiesRoutine = null;
+    }
+
     private void OnPlayerHit()
     {
         UpdateEnemiesAlive();
@@ -92,16 +107,4 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator UpdateEnemiesRoutine()
-    {
-        _currentEnemiesAlive--;
-        yield return _waitEnemiesUpdateSeconds;
-
-        if (_currentEnemiesAlive < 1)
-        {
-            EventService.Instance.OnWaveEnd.InvokeEvent();
-        }
-
-        _updateEnemiesRoutine = null;
-    }
 }

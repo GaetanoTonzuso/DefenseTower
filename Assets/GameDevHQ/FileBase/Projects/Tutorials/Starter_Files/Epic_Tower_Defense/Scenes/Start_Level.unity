@@ -7428,7 +7428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxWaves: 10
-  _enemiesToSpawn: 2
+  _enemiesToSpawn: 1
   _winPanel: {fileID: 1588928487}
 --- !u!1 &1198225470
 GameObject:

@@ -21,7 +21,6 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private int _enemiesToSpawn = 1;
     private int _enemiesSpawned = 0;
     private int _currentWave = 0;
-    private int _nextWave;
     [SerializeField] private GameObject _winPanel;
 
     private void OnEnable()
@@ -46,7 +45,9 @@ public class SpawnManager : MonoBehaviour
     {
         _enemiesSpawned = 0;
         _currentWave++;
+        Debug.Log("Current Wave: " + _currentWave);
         _enemiesToSpawn *= _currentWave;
+        Debug.Log("Enemies to spawn: " + _enemiesToSpawn);
 
         yield return new WaitForSeconds(1f);
         while(_enemiesSpawned < _enemiesToSpawn)
@@ -57,10 +58,9 @@ public class SpawnManager : MonoBehaviour
             {
                 ObjectPoolingManager.Instance.RequestEnemy();
                 _enemiesSpawned++;
-                GameManager.instance.InitializeEnemiesAlive(_enemiesSpawned);
+                GameManager.instance.InitializeEnemiesAlive();
                 yield return new WaitForSeconds(Random.Range(1.5f, 12.5f));
             }
-
             yield return null;
         }
             _waveRoutine = null;
