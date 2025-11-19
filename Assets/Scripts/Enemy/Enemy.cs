@@ -221,12 +221,7 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
             _agent.stoppingDistance = _attackDistance;
             _hasDetectedTower = true;
             _target = other.transform;
-
-            if (CanMove())
-            {
-               _agent.SetDestination(_target.position);
-            }
-
+            _agent.SetDestination(_target.position);
             Attack();
         }
     }
@@ -265,9 +260,7 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
             _anim.SetTrigger("Attack");
             yield return _attackRoutineSeconds;
         }
-
         _agent.isStopped = false;
         _attackRoutine = null;
-
     }
 }

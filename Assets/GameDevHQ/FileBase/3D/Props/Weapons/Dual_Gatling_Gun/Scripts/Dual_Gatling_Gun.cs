@@ -6,7 +6,7 @@ using UnityEngine;
 //namespace GameDevHQ.FileBase.Dual_Gatling_Gun
 
     [RequireComponent(typeof(AudioSource))] //Require Audio Source component
-    public class Dual_Gatling_Gun : MonoBehaviour, IAttack, IDamageable
+    public class Dual_Gatling_Gun : MonoBehaviour, IAttack, IDamageable, IWeapon
     {
         [SerializeField] private GameObject _firePoint; //Reference to hold Shooting Point
         [SerializeField] private float _fireDistance = 30f;

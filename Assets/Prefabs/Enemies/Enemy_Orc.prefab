@@ -1971,7 +1971,7 @@ MonoBehaviour:
   _health: 100
   _target: {fileID: 0}
   _atkDamage: 12
-  _attackDistance: 1.25
+  _attackDistance: 1.5
   _targets:
   - {fileID: 0}
   - {fileID: 0}

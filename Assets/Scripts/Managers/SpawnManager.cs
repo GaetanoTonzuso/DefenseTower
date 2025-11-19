@@ -18,7 +18,8 @@ public class SpawnManager : MonoBehaviour
 
     private Coroutine _waveRoutine;
     [SerializeField] private int _maxWaves = 5;
-    [SerializeField] private int _enemiesToSpawn = 1;
+    [SerializeField] private int _enemiesToSpawn;
+    [SerializeField] private int _baseEnemyCount = 2;
     private int _enemiesSpawned = 0;
     private int _currentWave = 0;
     [SerializeField] private GameObject _winPanel;
@@ -46,10 +47,10 @@ public class SpawnManager : MonoBehaviour
         _enemiesSpawned = 0;
         _currentWave++;
         Debug.Log("Current Wave: " + _currentWave);
-        _enemiesToSpawn *= _currentWave;
+        _enemiesToSpawn = _baseEnemyCount * _currentWave;
         Debug.Log("Enemies to spawn: " + _enemiesToSpawn);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         while(_enemiesSpawned < _enemiesToSpawn)
         {
             EventService.Instance.OnWaveBegin.InvokeEvent(_currentWave,_maxWaves); //Send info to UI
@@ -59,7 +60,7 @@ public class SpawnManager : MonoBehaviour
                 ObjectPoolingManager.Instance.RequestEnemy();
                 _enemiesSpawned++;
                 GameManager.instance.InitializeEnemiesAlive();
-                yield return new WaitForSeconds(Random.Range(1.5f, 12.5f));
+                yield return new WaitForSeconds(Random.Range(1.5f, 6));
             }
             yield return null;
         }

@@ -180,14 +180,15 @@ namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret
             {
                 _hasTarget = true;
                 AimTarget aimPoint = _enemies[0].GetComponentInChildren<AimTarget>();
-                _currentTarget = aimPoint.transform;
-                StopCoroutine(FireRocketsRoutine());
+                _currentTarget = aimPoint.transform;             
             }
             else
             {
                 _hasTarget = false;
                 _currentTarget = null;
             }
+
+            StopCoroutine(FireRocketsRoutine());
         }
     }
 }

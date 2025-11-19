@@ -2268,7 +2268,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.34666666
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 3b12b652e3cc5a949bf27092b3fe4812, type: 2}
   m_BuildHeightMesh: 0
@@ -2611,7 +2611,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -23.036802
+      value: -23.616
       objectReference: {fileID: 0}
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4524,7 +4524,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0.412
       objectReference: {fileID: 0}
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5300,7 +5300,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -23.036802
+      value: -22.7
       objectReference: {fileID: 0}
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5536,15 +5536,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.286802
+      value: -16.771
       objectReference: {fileID: 0}
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0.149
       objectReference: {fileID: 0}
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.7
+      value: 13.914
       objectReference: {fileID: 0}
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7430,6 +7430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxWaves: 10
   _enemiesToSpawn: 1
+  _baseEnemyCount: 2
   _winPanel: {fileID: 1588928487}
 --- !u!1 &1198225470
 GameObject:
@@ -12517,11 +12518,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.47
+      value: 0.32
       objectReference: {fileID: 0}
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.0599566
+      value: -8.37
       objectReference: {fileID: 0}
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14330,7 +14331,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -23.036802
+      value: -23.302
       objectReference: {fileID: 0}
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.y
