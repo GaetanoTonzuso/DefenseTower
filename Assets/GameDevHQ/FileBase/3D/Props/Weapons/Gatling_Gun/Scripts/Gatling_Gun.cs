@@ -149,19 +149,35 @@ namespace GameDevHQ.FileBase.Gatling_Gun
             _gunBarrel.transform.Rotate(Vector3.forward * Time.deltaTime * -500.0f); //rotate the gun barrel along the "forward" (z) axis at 500 meters per second
         }
 
+        public void UpdateTarget(AimTarget target)
+        {
+            _enemies.Add(target.transform.parent.transform.parent.GetComponent<Enemy>());
+            if (_enemies.Count > 0)
+            {
+                _hasTarget = true;
+                AimTarget aimPoint = _enemies[0].GetComponentInChildren<AimTarget>();
+                _currentTarget = aimPoint.transform;
+            }
+        }
+
+        public void UpdateEnemiesList(Enemy enemy)
+        {
+            _enemies.Remove(enemy.GetComponent<Enemy>());
+            if (_enemies.Count > 0)
+            {
+                _hasTarget = true;
+                AimTarget aimPoint = _enemies[0].GetComponentInChildren<AimTarget>();
+                _currentTarget = aimPoint.transform;
+            }
+            else
+            {
+                _hasTarget = false;
+                _currentTarget = null;
+            }
+        }
+
         private void OnTriggerEnter(Collider other)
         {
-            if(other.CompareTag("Enemy"))
-            {
-                _enemies.Add(other.GetComponent<Enemy>());
-                if(_enemies.Count > 0)
-                {
-                    _hasTarget = true;
-                    AimTarget aimPoint = _enemies[0].GetComponentInChildren<AimTarget>();
-                    _currentTarget = aimPoint.transform;
-                }
-            }
-
             if( other.CompareTag("EnemyWeapon"))
             {
                 if(Health > 0)
@@ -174,7 +190,7 @@ namespace GameDevHQ.FileBase.Gatling_Gun
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Enemy"))
+            /*if (other.CompareTag("Enemy"))
             {
                 _enemies.Remove(other.GetComponent<Enemy>());
                 if (_enemies.Count > 0)
@@ -188,7 +204,7 @@ namespace GameDevHQ.FileBase.Gatling_Gun
                     _hasTarget = false;
                     _currentTarget = null;
                 }
-            }
+            }*/
         }
 
         public void Damage(float damage)

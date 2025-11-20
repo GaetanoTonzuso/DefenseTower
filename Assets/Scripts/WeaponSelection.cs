@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -18,6 +19,7 @@ public class WeaponSelection : MonoBehaviour
         EventService.Instance.OnItemPreview.AddListener(OnItemPreview);
         EventService.Instance.OnItemNotPreview.AddListener(OnItemNotPreview);
         EventService.Instance.OnItemSpawned.AddListener(OnItemSpawned);
+        EventService.Instance.OnActionCancel.AddListener(OnCancel);
     }
 
     private void OnDisable()
@@ -26,6 +28,7 @@ public class WeaponSelection : MonoBehaviour
         EventService.Instance.OnItemPreview.RemoveListener(OnItemPreview);
         EventService.Instance.OnItemNotPreview.RemoveListener(OnItemNotPreview);
         EventService.Instance.OnItemSpawned.RemoveListener(OnItemSpawned);
+        EventService.Instance.OnActionCancel.RemoveListener(OnCancel);
     }
 
     private void Update()
@@ -60,14 +63,23 @@ public class WeaponSelection : MonoBehaviour
         }
     }
 
-    private void OnItemPreview() //Inform Place Zone
+    private void OnItemPreview() //Inform Place Zone that we are previewing
     {
-        _isPreviewing = true;
+        _isPreviewing = true;       
     }
 
-    private void OnItemNotPreview() //Inform Place Zone
+    private void OnItemNotPreview() //Inform Place Zone that we are not previewing
     {
+        _isPreviewing = false;       
+    }
+
+    private void OnCancel()
+    {
+        if (_currentItem != null)
+            Destroy(_currentItem);
+
         _isPreviewing = false;
+        _currentItem = null;
     }
 
     private void OnItemSpawned()

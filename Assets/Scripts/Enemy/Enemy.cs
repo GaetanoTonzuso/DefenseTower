@@ -217,10 +217,10 @@ public class Enemy : MonoBehaviour, IDamageable, IAttack
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Turret") && !_hasDetectedTower && CanMove())
-        {
+        {            
             _agent.stoppingDistance = _attackDistance;
             _hasDetectedTower = true;
-            _target = other.transform;
+            _target = other.transform.parent;
             _agent.SetDestination(_target.position);
             Attack();
         }

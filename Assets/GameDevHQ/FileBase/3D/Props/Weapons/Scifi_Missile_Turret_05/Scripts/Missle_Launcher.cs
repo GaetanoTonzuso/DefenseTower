@@ -141,9 +141,36 @@ namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret
             }
         }
 
+        public void UpdateTarget(AimTarget target)
+        {
+            _enemies.Add(target.transform.parent.transform.parent.GetComponent<Enemy>());
+            if (_enemies.Count > 0)
+            {
+                _hasTarget = true;
+                AimTarget aimPoint = _enemies[0].GetComponentInChildren<AimTarget>();
+                _currentTarget = aimPoint.transform;
+            }
+        }
+
+        public void UpdateEnemiesList(Enemy enemy)
+        {
+            _enemies.Remove(enemy.GetComponent<Enemy>());
+            if (_enemies.Count > 0)
+            {
+                _hasTarget = true;
+                AimTarget aimPoint = _enemies[0].GetComponentInChildren<AimTarget>();
+                _currentTarget = aimPoint.transform;
+            }
+            else
+            {
+                _hasTarget = false;
+                _currentTarget = null;
+            }
+        }
+
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Enemy"))
+            /*if (other.CompareTag("Enemy"))
             {
                 _enemies.Add(other.GetComponent<Enemy>());
                 if (_enemies.Count > 0)
@@ -152,7 +179,7 @@ namespace GameDevHQ.FileBase.Missle_Launcher_Dual_Turret
                     AimTarget aimPoint = _enemies[0].GetComponentInChildren<AimTarget>();
                     _currentTarget = aimPoint.transform;
                 }
-            }
+            }*/
 
             if (other.CompareTag("EnemyWeapon"))
             {

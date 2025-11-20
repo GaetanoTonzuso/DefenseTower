@@ -1522,6 +1522,7 @@ GameObject:
   - component: {fileID: 7014078653663622254}
   - component: {fileID: 3421221626399395485}
   - component: {fileID: 7707548323859157506}
+  - component: {fileID: 8979381138205064332}
   m_Layer: 2
   m_Name: Sphere
   m_TagString: Turret
@@ -1642,3 +1643,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8979381138205064332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6012632279394534151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bb15b5ab6266e54098a076b8b925536, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -34,7 +34,6 @@ public class PlayerRaycast : MonoBehaviour
                 if (_lastInteractable != null)
                     OnHoverExit(_lastInteractable);
 
-                // Entra nel nuovo oggetto
                 OnHoverEnter(interactable);
                 interactable.Activate();
                 interactable.Interact();

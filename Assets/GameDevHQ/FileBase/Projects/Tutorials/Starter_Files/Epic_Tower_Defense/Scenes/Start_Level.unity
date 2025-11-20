@@ -6842,15 +6842,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.286802
+      value: -16.501
       objectReference: {fileID: 0}
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0.802
       objectReference: {fileID: 0}
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.4400434
+      value: 4.661
       objectReference: {fileID: 0}
     - target: {fileID: 1696747348462742593, guid: 27958918f0686254fae95e321bc37145, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7368,7 +7368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lives: 5
-  _warfunds: 500
+  _warfunds: 5000
 --- !u!4 &1188784245
 Transform:
   m_ObjectHideFlags: 0

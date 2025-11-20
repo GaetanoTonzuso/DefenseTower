@@ -19724,7 +19724,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: fdbaa274f62e74a23b90855541dd06c9, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -29937,9 +29936,9 @@ GameObject:
   - component: {fileID: 4321718789516178}
   - component: {fileID: 114783078296505704}
   - component: {fileID: 82127826341503972}
-  - component: {fileID: 4880102726174795932}
-  - component: {fileID: 1626133886937145129}
-  m_Layer: 0
+  - component: {fileID: 3299238389443727953}
+  - component: {fileID: 3759282943530441463}
+  m_Layer: 7
   m_Name: Dual_Gatling_Gun
   m_TagString: Turret
   m_Icon: {fileID: 0}
@@ -30091,7 +30090,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!54 &4880102726174795932
+--- !u!54 &3299238389443727953
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -30118,7 +30117,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!135 &1626133886937145129
+--- !u!135 &3759282943530441463
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -30137,8 +30136,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5589627
-  m_Center: {x: 0, y: 0.34915996, z: 0}
+  m_Radius: 0.58470166
+  m_Center: {x: 0, y: 0.5032543, z: 0}
 --- !u!1 &1894202968726316
 GameObject:
   m_ObjectHideFlags: 0
@@ -30279,7 +30278,7 @@ Transform:
   m_GameObject: {fileID: 1514977078818765063}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.28, z: 2.6}
+  m_LocalPosition: {x: 0, y: 1.28, z: 1.779}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -30297,7 +30296,8 @@ GameObject:
   - component: {fileID: 6885518640962795297}
   - component: {fileID: 705042911898093434}
   - component: {fileID: 6197495348644367153}
-  - component: {fileID: 5196139765322164264}
+  - component: {fileID: 467763778952796191}
+  - component: {fileID: 8096828520910641462}
   m_Layer: 2
   m_Name: Sphere
   m_TagString: Turret
@@ -30391,7 +30391,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.8
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &5196139765322164264
+--- !u!54 &467763778952796191
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -30418,3 +30418,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8096828520910641462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4636760796865511784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bb15b5ab6266e54098a076b8b925536, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

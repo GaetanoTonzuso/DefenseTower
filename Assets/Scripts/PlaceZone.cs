@@ -18,13 +18,13 @@ public class PlaceZone : MonoBehaviour, IInteractable
     private bool _canPlace = true;
 
     private Coroutine _checkWeaponDestroyed;
-    private WaitForSeconds _weaponCheckWaitSeconds = new WaitForSeconds(1);
 
     private void OnEnable()
     {
         EventService.Instance.OnItemSelected.AddListener(OnItemSelected);
         EventService.Instance.OnItemSpawned.AddListener(OnItemSpawned);
         EventService.Instance.OnWeaponDestroyed.AddListener(OnWeaponDestroyed);
+        EventService.Instance.OnActionCancel.AddListener(CancelAction);
     }
 
     private void OnDisable()
@@ -32,6 +32,7 @@ public class PlaceZone : MonoBehaviour, IInteractable
         EventService.Instance.OnItemSelected.RemoveListener(OnItemSelected);
         EventService.Instance.OnItemSpawned.RemoveListener(OnItemSpawned);
         EventService.Instance.OnWeaponDestroyed.RemoveListener(OnWeaponDestroyed);
+        EventService.Instance.OnActionCancel.RemoveListener(CancelAction);
     }
 
     private void Start()
@@ -107,7 +108,7 @@ public class PlaceZone : MonoBehaviour, IInteractable
     public void Deactivate()
     {
         EventService.Instance.OnActionPerformed.RemoveListener(SpawnWeapon);
-        EventService.Instance.OnActionCancel.AddListener(CancelAction);
+        EventService.Instance.OnActionCancel.RemoveListener(CancelAction);
 
         //Send signal to Weapon Selection script
         EventService.Instance.OnItemNotPreview.InvokeEvent();
@@ -123,14 +124,18 @@ public class PlaceZone : MonoBehaviour, IInteractable
     private void SpawnWeapon()
     {
         //Enable all sphere colliders for our Weapons
-        foreach (Collider col in _itemClone.GetComponentsInChildren<Collider>())
+        if(_itemClone != null)
         {
-            if(col != null)
-            col.enabled = true;
+            foreach (Collider col in _itemClone.GetComponentsInChildren<Collider>())
+            {
+                if(col != null)
+                col.enabled = true;
+            }
+            GameManager.instance.RemoveWarfunds(_currentItemCost);
+            EventService.Instance.OnItemSpawned.InvokeEvent();      
+            _canPlace = false;     
+
         }
-        GameManager.instance.RemoveWarfunds(_currentItemCost);
-        EventService.Instance.OnItemSpawned.InvokeEvent();      
-        _canPlace = false;     
     }
 
     private void OnItemSpawned()
@@ -143,12 +148,13 @@ public class PlaceZone : MonoBehaviour, IInteractable
 
     private void CancelAction()
     {
-        //Cancel preview item and reset cost
-        _previewSpawned = false;
-        _currentItemCost = 0;
-        _itemPreviewPrefab = null;
-        _itemClone = null;
-        EventService.Instance.OnItemSpawned.InvokeEvent();
+        Debug.Log("Cancel Action called");
+            //Cancel preview item and reset cost
+            Destroy(_itemClone);
+            _previewSpawned = false;
+            _currentItemCost = 0;
+            _itemPreviewPrefab = null;
+            EventService.Instance.OnItemNotPreview.InvokeEvent();
     }
 
     private void OnWeaponDestroyed()
