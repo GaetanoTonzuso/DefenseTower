@@ -7,14 +7,15 @@ using UnityEngine.InputSystem;
 
 public class WeaponSelection : MonoBehaviour
 {
-    Vector2 _mousePos;
-    private GameObject _currentItem;
-    private bool _isPreviewing;
+    Vector2 _mousePos;                    // Current mouse position on screen
+    private GameObject _currentItem;      // The weapon/item currently being dragged by the player
+    private bool _isPreviewing;           // Whether the player is previewing over a PlaceZone
 
-    [SerializeField] private float _z = 18;
+    [SerializeField] private float _z = 18;  // Distance from camera to spawn the preview item
 
     private void OnEnable()
     {
+        // Listen to item selection and placement preview events
         EventService.Instance.OnItemSelected.AddListener(OnItemSelected);
         EventService.Instance.OnItemPreview.AddListener(OnItemPreview);
         EventService.Instance.OnItemNotPreview.AddListener(OnItemNotPreview);
@@ -24,6 +25,7 @@ public class WeaponSelection : MonoBehaviour
 
     private void OnDisable()
     {
+        // Remove event listeners
         EventService.Instance.OnItemSelected.RemoveListener(OnItemSelected);
         EventService.Instance.OnItemPreview.RemoveListener(OnItemPreview);
         EventService.Instance.OnItemNotPreview.RemoveListener(OnItemNotPreview);
@@ -33,10 +35,14 @@ public class WeaponSelection : MonoBehaviour
 
     private void Update()
     {
+        // Always track the mouse cursor position
         _mousePos = Mouse.current.position.ReadValue();
+
+        // If the player has selected a weapon to drag around
         if (_currentItem != null)
         {
-            if(_isPreviewing)
+            // Hide weapon preview when hovering a valid PlaceZone
+            if (_isPreviewing)
             {
                 _currentItem.SetActive(false);
             }
@@ -44,35 +50,49 @@ public class WeaponSelection : MonoBehaviour
             {
                 _currentItem.SetActive(true);
             }
-                
-           _currentItem.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(_mousePos.x, _mousePos.y, _z));
+
+            // Move the held weapon to match cursor position in world space
+            _currentItem.transform.position = Camera.main.ScreenToWorldPoint(
+                new Vector3(_mousePos.x, _mousePos.y, _z)
+            );
         }
     }
 
+    // Called when a weapon is selected from UI
     private void OnItemSelected(GameObject itemSelected, int cost)
     {
+        // If the player already had a dragged item, remove it
         if (_currentItem != null)
             Destroy(_currentItem);
-        
-        Vector3 spawnPos = Camera.main.ScreenToWorldPoint(new Vector3(_mousePos.x, _mousePos.y, _z));
 
+        // Calculate spawn position based on cursor location
+        Vector3 spawnPos = Camera.main.ScreenToWorldPoint(
+            new Vector3(_mousePos.x, _mousePos.y, _z)
+        );
+
+        // Spawn a copy of the item for dragging
         _currentItem = Instantiate(itemSelected, spawnPos, Quaternion.identity);
-        foreach(Collider col in _currentItem.GetComponentsInChildren<Collider>())
+
+        // Disable colliders so the dragged item doesn't interact with the world
+        foreach (Collider col in _currentItem.GetComponentsInChildren<Collider>())
         {
             col.enabled = false;
         }
     }
 
-    private void OnItemPreview() //Inform Place Zone that we are previewing
+    // Fired when hovering a PlaceZone for preview placement
+    private void OnItemPreview()
     {
-        _isPreviewing = true;       
+        _isPreviewing = true;
     }
 
-    private void OnItemNotPreview() //Inform Place Zone that we are not previewing
+    // Fired when leaving a PlaceZone
+    private void OnItemNotPreview()
     {
-        _isPreviewing = false;       
+        _isPreviewing = false;
     }
 
+    // Called when the player cancels the placement action
     private void OnCancel()
     {
         if (_currentItem != null)
@@ -82,6 +102,7 @@ public class WeaponSelection : MonoBehaviour
         _currentItem = null;
     }
 
+    // Called when the player successfully places the weapon
     private void OnItemSpawned()
     {
         Destroy(_currentItem);

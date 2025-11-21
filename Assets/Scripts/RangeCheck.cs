@@ -19,7 +19,6 @@ public class RangeCheck : MonoBehaviour
     {
         if(other.CompareTag("Enemy"))
         {
-            Debug.Log("Called Update Target");
             _weapon.UpdateTarget(other.transform.GetComponentInChildren<AimTarget>());
         }
     }
